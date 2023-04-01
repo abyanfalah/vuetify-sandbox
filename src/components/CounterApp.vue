@@ -3,6 +3,6 @@
 
 <template>
   <div >
-    <h1>Todo app</h1>
+    <h1>Counter app</h1>
   </div>
 </template>

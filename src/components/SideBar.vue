@@ -14,20 +14,17 @@ function toPage(page) {
     rail-width="65"
     expand-on-hover
     elevation="1"
+    width="300"
   >
     <v-list>
-      <v-list-item align="center">
-        <v-icon
-          icon="mdi-vuetify"
-          size="x-large"
-          color=""
-        />
-      </v-list-item>
       <v-list-item
+        class="ms-1"
+        prepend-icon="mdi-vuetify"
+        size="x-large"
+        color=""
         title="Vuetify Playground"
         subtitle="Mess around, and find out..."
-        align="center"
-        ></v-list-item>
+      />
     </v-list>
 
     <v-divider></v-divider>

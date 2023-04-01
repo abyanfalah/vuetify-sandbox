@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <v-main >
+  <div >
     <h1>Test page</h1>
-  </v-main>
+  </div>
 </template>
