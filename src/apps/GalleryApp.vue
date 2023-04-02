@@ -69,27 +69,13 @@ onMounted(() => {
 
         <!-- randomize btn -->
         <v-btn class="ms-1"
-               icon="mdi-dice-3-outline">
+               icon="mdi-dice-3-outline"
+               @click="randomizeDialog = true">
           <v-icon icon="mdi-dice-3-outline"></v-icon>
-          <v-dialog activator="parent"
-                    v-model="randomizeDialog"
-                    persistent
-                    width="auto">
-            <v-card class="pa-4">
-              <v-card-text>
-                <p>
-                  Randomize the images?
-                </p>
-                <span class="text-grey text-caption">You probably won't see these images anymore.</span>
-              </v-card-text>
-              <v-card-actions class="d-flex justify-space-around">
-                <v-btn variant="outlined"
-                       color="red"
-                       @click="changeRandomizer">Yes</v-btn>
-                <v-btn @click="randomizeDialog = false">No</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <ModalConfirmRandomize v-model="randomizeDialog"
+                                 @cancelRandomize="randomizeDialog = false"
+                                 @confirmRandomize="changeRandomizer" />
+
         </v-btn>
 
         <!-- zoom out btn -->
