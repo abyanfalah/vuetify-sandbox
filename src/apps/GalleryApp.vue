@@ -36,7 +36,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="ma-10">
     <v-app-bar color="warning"
                title="Gallery app"
                flat>
