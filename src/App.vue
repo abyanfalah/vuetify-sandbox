@@ -41,7 +41,6 @@ onBeforeMount(() => {
     <!-- main content -->
     <v-main>
       <component v-if="selectedApp"
-                 class="mx-3 my-2 px-3 py-2"
                  :is="apps[selectedApp]" />
 
       <div class="mx-3 my-2 px-3 py-2"
