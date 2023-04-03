@@ -25,14 +25,13 @@ const states = computed(() => {
   };
 });
 
-watch(states, () => {
-  localStorage.setItem("galleryApp", JSON.stringify(states.value));
+watch(states, (newState) => {
+  localStorage.setItem("galleryApp", JSON.stringify(newState));
 });
 
 onMounted(() => {
   const storedState = JSON.parse(localStorage.getItem("galleryApp"));
   numberOfImagesToDisplay.value = storedState.numberOfImagesToDisplay ?? numberOfImagesToDisplay.value;
-
   columnNumber.value = storedState.columnNumber ?? columnNumber.value;
   colorize.value = storedState.colorize ?? colorize.value;
 });
@@ -75,7 +74,6 @@ onMounted(() => {
           <ModalConfirmRandomize v-model="randomizeDialog"
                                  @cancelRandomize="randomizeDialog = false"
                                  @confirmRandomize="changeRandomizer" />
-
         </v-btn>
 
         <!-- zoom out btn -->
@@ -101,7 +99,10 @@ onMounted(() => {
           <v-col v-for="n in numberOfImagesToDisplay"
                  :cols="columnNumber">
             <v-card elevation="3">
-              <v-img :src="`https://picsum.photos/id/${randomizerFactor * 19 + n}/200${!colorize ? '?grayscale' : ''}`"
+              <v-img :src="`https://picsum.photos/id/${randomizerFactor * 19 + n}/200${!colorize ? '?grayscale' : ''}`
+
+              "
+                     lazy-src="http://egyptianstreets.com/wp-content/uploads/2017/07/404.jpg"
                      aspect-ratio="1"
                      :cover="true">
                 <template v-slot:placeholder>
