@@ -13,8 +13,6 @@ const randomizeDialog = ref(false);
 function changeRandomizer() {
   randomizeDialog.value = false;
   randomizerFactor.value = Math.floor(Math.random() * 10);
-
-  // show a nice  overlay with progress
 }
 
 const states = computed(() => {
