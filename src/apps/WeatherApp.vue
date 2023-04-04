@@ -70,7 +70,7 @@ async function getWeatherData() {
     console.error("error nih", err);
     weatherData.value = null;
     currentWeather.value = null;
-    isError.value = err.response.data.message;
+    isError.value = err;
   } finally {
     isSearching.value = false;
   }
@@ -192,13 +192,13 @@ onMounted(() => {
                   </div>
 
                   <span class="text-h5">
-                    {{ currentWeather.weathercode }}
+                    {{ weatherService.getWeatherName(currentWeather.weathercode) }}
                   </span>
 
                   <v-btn class="mt-5"
-                         :color="tempColor"
-                         :variant="isShowingDetails ? 'outlined' : 'tonal'"
-                         @click="isShowingDetails = !isShowingDetails">details</v-btn>
+                         :color="`${tempColor} `"
+                         :icon="`mdi-chevron-${isShowingDetails ? 'left' : 'right'}`"
+                         @click="isShowingDetails = !isShowingDetails"></v-btn>
                 </v-col>
 
                 <!-- weather details -->
