@@ -1,15 +1,31 @@
 import axios from "axios";
+import capitalize from "capitalize";
 
-export default function (location) {
-  const options = {
-    method: "GET",
-    url: "https://weatherapi-com.p.rapidapi.com/current.json",
-    params: { q: location },
-    headers: {
-      "X-RapidAPI-Key": "c94edc5a54msh35c5e84f991d798p16a9eejsn4dfbe87348a8",
-      "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com",
-    },
-  };
+export default {
+  getWeather: async (locationQuery) => {
+    /**
+     * RapidApi put limitation on free users.
+     * Use open-meteo instead.
+     */
 
-  return axios(options);
-}
+    const locationData = (
+      await axios.get(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${locationQuery}&language=en&count=1&format=json`
+      )
+    ).data.results[0];
+
+    let weatherData = await axios.get(
+      `https://api.open-meteo.com/v1/forecast?latitude=${locationData.latitude}&longitude=${locationData.longitude}&hourly=temperature_2m,apparent_temperature,precipitation_probability,rain,showers,weathercode,visibility&timeformat=unixtime&forecast_days=1&timezone=${locationData.timezone}`
+    );
+
+    const address = (
+      await axios.get(
+        `https://geocode.maps.co/reverse?lat=${locationData.latitude}&lon=${locationData.longitude}`
+      )
+    ).data.address;
+
+    weatherData.data.address = address;
+
+    return weatherData;
+  },
+};
