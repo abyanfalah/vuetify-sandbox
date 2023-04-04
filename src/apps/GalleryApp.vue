@@ -33,6 +33,8 @@ onMounted(() => {
   numberOfImagesToDisplay.value = storedState.numberOfImagesToDisplay ?? numberOfImagesToDisplay.value;
   columnNumber.value = storedState.columnNumber ?? columnNumber.value;
   colorize.value = storedState.colorize ?? colorize.value;
+  randomizerFactor.value = storedState.randomizerFactor ?? randomizerFactor.value;
+
 });
 </script>
 
