@@ -19,7 +19,8 @@ const states = computed(() => {
   return {
     numberOfImagesToDisplay: numberOfImagesToDisplay.value,
     columnNumber: columnNumber.value,
-    colorize: colorize.value
+    colorize: colorize.value,
+    randomizerFactor: randomizerFactor.value
   };
 });
 
@@ -37,7 +38,8 @@ onMounted(() => {
 
 <template>
   <div class="ma-10">
-    <v-app-bar color="warning"
+
+    <v-app-bar color="orange"
                title="Gallery app"
                flat>
       <template v-slot:append>
@@ -97,14 +99,13 @@ onMounted(() => {
           <v-col v-for="n in numberOfImagesToDisplay"
                  :cols="columnNumber">
             <v-card elevation="3">
-              <v-img :src="`https://picsum.photos/id/${randomizerFactor * 19 + n}/200${!colorize ? '?grayscale' : ''}`
-
-              "
-                     lazy-src="http://egyptianstreets.com/wp-content/uploads/2017/07/404.jpg"
+              <v-img :src="`https://picsum.photos/id/${randomizerFactor * 19 + n}/200${!colorize ? '?grayscale' : ''}`"
                      aspect-ratio="1"
                      :cover="true">
                 <template v-slot:placeholder>
-                  <ProgressCircular />
+                  <div class="fill-height d-flex align-center justify-center">
+                    <ProgressCircular />
+                  </div>
                 </template>
               </v-img>
             </v-card>
