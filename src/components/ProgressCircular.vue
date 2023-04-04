@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['size', 'width']);
+const props = defineProps(['size', 'width', 'color']);
 
 </script>
 
@@ -7,5 +7,5 @@ const props = defineProps(['size', 'width']);
   <v-progress-circular indeterminate
                        :width="props.width"
                        :size="props.size"
-                       color="orange lighten-1"></v-progress-circular>
+                       :color="props.color ?? 'warning'"></v-progress-circular>
 </template>
