@@ -33,7 +33,7 @@ export default {
       0: "Clear sky",
       1: "Mainly clear",
       2: "partly cloudy",
-      3: "and overcast",
+      3: "overcast",
       45: "Fog",
       48: "depositing rime fog",
       51: "Light Drizzle",
