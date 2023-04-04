@@ -9,9 +9,11 @@ const weatherData = ref();
 const isSearching = ref(false);
 const location = ref({});
 const isCelsius = ref(true);
+const isShowingDetails = ref(false);
+const isError = ref(null);
 
 const tempColor = computed(() => {
-  if (!weatherData.value) return 'white';
+  if (!weatherData.value || !Object.keys(weatherData.value).length) return 'white';
 
   const temperature = weatherData.value.current.temp_c;
 
@@ -37,8 +39,11 @@ async function getWeatherData() {
     location.value = weatherData.value.location;
 
     isSearching.value = false;
+    isShowingDetails.value = false;
   } catch (err) {
-    console.error(err);
+    console.error("error nih", err);
+    weatherData.value = null;
+    isError.value = err.response.data.message;
     isSearching.value = false;
   }
 }
@@ -47,7 +52,9 @@ const states = (() => {
   return {
     locationQuery: locationQuery.value,
     weatherData: weatherData.value,
-    location: location.value
+    location: location.value,
+    isCelsius: isCelsius.value,
+    isShowingDetails: isShowingDetails.value
 
   };
 
@@ -70,14 +77,14 @@ onMounted(() => {
   <div class="h-100"
        :class="`bg-${tempColor}-lighten-2`">
     <v-app-bar title="Weather app"
+               :class="`bg-${tempColor}-lighten-2`"
                flat>
       <template v-slot:append>
         <v-switch density="comfortable"
                   hide-details
                   v-model="isCelsius"
-                  :color="isCelsius ? 'green' : 'yellow'"
-                  prepend-icon="mdi-temperature-celsius"
-                  append-icon="mdi-temperature-fahrenheit"></v-switch>
+                  append-icon="mdi-temperature-celsius"
+                  prepend-icon="mdi-temperature-fahrenheit"></v-switch>
 
       </template>
     </v-app-bar>
@@ -87,9 +94,9 @@ onMounted(() => {
 
       <!-- locationQuery input -->
       <v-row>
-        <v-col cols="4"
+        <v-col cols="5"
                class="mx-auto">
-          <v-text-field color="blue"
+          <v-text-field :color="`${tempColor}`"
                         bg-color="white"
                         label="Search location"
                         placeholder="e.g. Tokyo"
@@ -107,16 +114,23 @@ onMounted(() => {
 
       <!-- weather and temperature -->
       <v-row>
-        <v-col>
-          <v-card align="center"
-                  elevation="24"
-                  max-width="700px"
-                  class="pt-5 pb-10 mx-auto">
-            <ProgressCircular v-if="isSearching" />
-            <div v-else-if="weatherData"
-                 class="d-flex flex-column align-center">
+        <v-col align="center">
+          <!-- when searching in progress -->
+          <ProgressCircular v-if="isSearching"
+                            size="128"
+                            width="12"
+                            class="ma-16" />
 
-              <v-row>
+          <!-- if got the data -->
+          <v-card v-else-if="weatherData"
+                  max-width="800px"
+                  :elevation="isError || isSearching ? 0 : '16'"
+                  class="pa-10">
+
+            <div class="d-flex flex-column align-center">
+              <v-row class="d-flex align-center">
+
+                <!-- hero weather data -->
                 <v-col class="d-flex flex-column align-center">
                   <span class="text-h3">
                     {{ location.name }} <img :src="weatherData.current.condition.icon"
@@ -127,28 +141,58 @@ onMounted(() => {
                   </span>
 
                   <div class="text-h1 my-10">
-                    {{ weatherData.current.temp_c }} <sup>
-                      <small class="font-weight">°C</small>
-                    </sup>
+                    <span v-if="isCelsius">
+                      {{ weatherData.current.temp_c }}
+                      <sup>
+                        <small>°C</small>
+                      </sup>
+                    </span>
+
+                    <span v-else>
+                      {{ weatherData.current.temp_f }}
+                      <sup>
+                        <small>°F</small>
+                      </sup>
+                    </span>
                   </div>
 
                   <span class="text-h5">
                     {{ weatherData.current.condition.text }}
                   </span>
+
+                  <v-btn class="mt-5"
+                         :color="tempColor"
+                         :variant="isShowingDetails ? 'outlined' : 'tonal'"
+                         @click="isShowingDetails = !isShowingDetails">details</v-btn>
                 </v-col>
+
+                <!-- weather details -->
+                <v-scroll-x-transition>
+                  <v-col v-show="isShowingDetails"
+                         transition="fade-transition"
+                         cols="6">
+                    {{ weatherData }}
+                  </v-col>
+                </v-scroll-x-transition>
               </v-row>
-
-
-
             </div>
-          </v-card>
-        </v-col>
-      </v-row>
 
-      <!-- other details -->
-      <div v-if="weatherData">
-        {{ weatherData.current }}
-      </div>
+
+          </v-card>
+
+          <!-- else, if error -->
+          <v-alert v-else-if="isError"
+                   closable
+                   width="400px"
+                   v-model="isError"
+                   title="Cannot get weather data"
+                   type="error">
+
+            {{ isError }}
+          </v-alert>
+        </v-col>
+
+      </v-row>
     </v-container>
 
 
