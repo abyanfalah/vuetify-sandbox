@@ -4,6 +4,7 @@ import { onBeforeMount, ref, watch } from 'vue';
 const emit = defineEmits(['seeTaskDetail']);
 const props = defineProps(['taskGroup']);
 const taskGroup = ref({});
+const selectedTask = ref(null);
 
 
 function changeColor() {
@@ -37,6 +38,21 @@ function addTask() {
   taskInput.value = '';
 };
 
+function selectTask(task) {
+  emit('seeTaskDetail', task);
+  selectedTask.value = task;
+}
+
+function toggleSelectTask(task) {
+  if (selectedTask.value == task) {
+    selectedTask.value = null;
+    emit('seeTaskDetail', null);
+  } else {
+    selectTask(task);
+  }
+
+}
+
 onBeforeMount(() => {
   taskGroup.value = props.taskGroup;
 });
@@ -44,7 +60,8 @@ onBeforeMount(() => {
 
 <template>
   <v-card :class="`bg-${taskGroup.color}`"
-          class="rounded elevation-3 pa-8">
+          elevation="3"
+          class="rounded  pa-8">
     <v-card-title class="pa-0">
       <v-text-field v-model="taskGroup.name"
                     label="Group name"
@@ -66,7 +83,7 @@ onBeforeMount(() => {
 
         <!-- checkbox -->
         <v-checkbox-btn v-model="task.isDone"
-                        @click="task.toggleDoneState()"></v-checkbox-btn>
+                        @click="task.toggleDoneState"></v-checkbox-btn>
         <input type="text"
                @keydown.enter="$event.target.blur()"
                v-model="taskGroup.taskList[index].task"
@@ -75,10 +92,10 @@ onBeforeMount(() => {
 
 
         <!-- see detail btn -->
-        <v-btn icon="mdi-chevron-right"
+        <v-btn :icon="`mdi-chevron-${selectedTask == task ? 'left' : 'right'}`"
                flat
-               class="bg-transparent"
-               @click="emit('seeTaskDetail', task)"
+               :class="selectedTask == task ? 'bg-black' : 'bg-transparent'"
+               @click="toggleSelectTask(task)"
                density="comfortable"></v-btn>
 
       </v-sheet>
