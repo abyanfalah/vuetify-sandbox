@@ -72,6 +72,7 @@ onBeforeMount(() => {
                     density="comfortable"
                     variant="underlined"
                     color="teal"
+                    :autofocus="taskGroup.name.toLowerCase().indexOf('task group ') > -1 ? true : false"
                     append-inner-icon="mdi-palette"
                     @click:append-inner="changeColor"
                     hide-details>
@@ -79,7 +80,7 @@ onBeforeMount(() => {
 
     </v-card-title>
 
-
+    <!-- task item -->
     <v-sheet class="mb-5 mt-10">
       <v-sheet v-for="(task, index) in taskGroup.taskList"
                :class="task.isDone ? 'text-disabled' : ''"
@@ -89,12 +90,13 @@ onBeforeMount(() => {
         <!-- checkbox -->
         <v-checkbox-btn v-model="task.isDone"
                         @click="task.toggleDoneState"></v-checkbox-btn>
+
+        <!-- task text -->
         <input type="text"
                @keydown.enter="$event.target.blur()"
                v-model="taskGroup.taskList[index].task"
                class="w-100"
                :class="task.isDone ? 'text-disabled text-decoration-line-through' : ''">
-
 
         <!-- see detail btn -->
         <v-btn :icon="`mdi-chevron-${selectedTask == task ? 'left' : 'right'}`"
@@ -102,14 +104,15 @@ onBeforeMount(() => {
                :class="selectedTask == task ? 'bg-black' : 'bg-transparent'"
                @click="toggleSelectTask(task)"
                density="comfortable"></v-btn>
-
       </v-sheet>
 
+      <!-- task input -->
       <v-text-field hide-details
                     density="comfortable"
                     class="rounded mt-5"
                     placeholder="Add new task"
                     clearable
+                    autofocus
                     label="+ New task"
                     append-inner-icon="mdi-plus"
                     @click:append-inner="addTask"
