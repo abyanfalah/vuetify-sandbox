@@ -37,7 +37,7 @@ function toggleSelectedTaskgroup(taskGroup) {
   selectedTaskGroup.value = taskGroup;
   setTimeout(() => {
     isViewingTaskGroup.value = true;
-  }, 200);
+  }, 100);
 }
 
 const states = computed(() => {
