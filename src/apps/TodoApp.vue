@@ -13,7 +13,8 @@ function newTaskGroup() {
   const newTaskGroup = {
     id: taskGroupListLength,
     color: 'white',
-    name: `Task group ${taskGroupListLength + 1}`
+    name: `Task group ${taskGroupListLength + 1}`,
+    taskList: [],
   };
 
   isViewingTaskGroup.value = false;
