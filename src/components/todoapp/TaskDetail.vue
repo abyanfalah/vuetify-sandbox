@@ -24,17 +24,20 @@ onBeforeMount(() => {
                     label="Task name"></v-text-field>
     </v-card-title>
 
+    <!-- task priority -->
     <v-combobox label="Priority"
                 variant="underlined"
                 v-model="task.priority"
                 density="comfortable"
-                :items="['Very High', 'High', 'Normal', 'Low', 'Optional']"></v-combobox>
+                :items="['Urgent', 'High', 'Normal', 'Low']"></v-combobox>
 
-
+    <!-- task additional nots -->
     <v-textarea label="Additional notes"
                 color="teal"
+                v-model="task.notes"
                 variant="outlined"></v-textarea>
 
+    <!-- buttons -->
     <v-card-actions>
       <v-btn icon="mdi-check"
              variant="default"
@@ -45,6 +48,5 @@ onBeforeMount(() => {
              color="red"></v-btn>
 
     </v-card-actions>
-    <!-- {{ task }} -->
   </v-card>
 </template>
