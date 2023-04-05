@@ -19,6 +19,7 @@ function newTaskGroup() {
     color: 'white',
     name: `Task group ${taskGroupListLength + 1}`,
     taskList: [],
+    priority: 'Normal'
   };
 
   isViewingTaskGroup.value = false;
@@ -42,6 +43,18 @@ function toggleSelectedTaskgroup(taskGroup) {
   setTimeout(() => {
     isViewingTaskGroup.value = true;
   }, 100);
+}
+
+function deleteTaskgroup(taskGroupToDelete) {
+  let tgList = taskGroupList.value;
+  tgList = tgList.filter((tg) => tg.id !== taskGroupToDelete.id);
+
+  taskGroupList.value = tgList;
+  toggleSelectedTaskgroup(taskGroupToDelete);
+  console.clear();
+
+  console.log('to delete =>', taskGroupToDelete);
+  console.log('list now =>', taskGroupList.value);
 }
 
 function showTaskDetail(task) {
@@ -78,6 +91,8 @@ onMounted(() => {
 
 function restoreStates() {
   const storedState = JSON.parse(localStorage.getItem("todoapp"));
+  if (storedState == null) return console.log('no storedState for todoapp');
+
   taskGroupList.value = storedState.taskGroupList ?? taskGroupList.value;
   isViewingTaskGroup.value = storedState.isViewingTaskGroup ?? taskGroupList.value;
   selectedTaskGroup.value = storedState.selectedTaskGroup ?? taskGroupList.value;
@@ -119,6 +134,7 @@ function restoreStates() {
       <v-col cols="6">
         <v-scroll-x-transition>
           <TaskList @see-task-detail="showTaskDetail"
+                    @delete-task-group="deleteTaskgroup"
                     v-if="isViewingTaskGroup"
                     :taskGroup="selectedTaskGroup" />
         </v-scroll-x-transition>
@@ -134,4 +150,6 @@ function restoreStates() {
     </v-row>
 
   </div>
+
+  {{ selectedTask }}
 </template>

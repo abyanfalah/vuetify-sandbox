@@ -1,10 +1,14 @@
 <script setup>
-import { onBeforeMount, ref, watch } from 'vue';
+import { onBeforeMount, ref } from 'vue';
+import todoAppModules from '@/services/todoAppModules';
 
-const emit = defineEmits(['seeTaskDetail']);
+const emit = defineEmits(['seeTaskDetail', 'deleteTaskGroup']);
 const props = defineProps(['taskGroup']);
+const getColorByPriority = todoAppModules.getColorByPriority;
+
 const taskGroup = ref({});
 const selectedTask = ref(null);
+
 
 
 function changeColor() {
@@ -79,6 +83,7 @@ onBeforeMount(() => {
     <v-sheet class="mb-5 mt-10">
       <v-sheet v-for="(task, index) in taskGroup.taskList"
                :class="task.isDone ? 'text-disabled' : ''"
+               :color="getColorByPriority(task.priority)"
                class="mb-3 py-1 px-2 border d-flex justify-space-between align-center rounded">
 
         <!-- checkbox -->
@@ -114,6 +119,14 @@ onBeforeMount(() => {
                     variant="outlined"></v-text-field>
 
     </v-sheet>
+
+    <v-card-actions>
+      <v-btn color="red"
+             variant="tonal"
+             @click="emit('deleteTaskGroup', taskGroup)"
+             prepend-icon="mdi-delete">Delete task group</v-btn>
+      => modal confirmation
+    </v-card-actions>
   </v-card>
 </template>
 
