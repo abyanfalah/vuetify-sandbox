@@ -69,39 +69,32 @@ function restoreStates() {
   <div :class="`h-100 bg-teal-lighten-4 pa-10`">
     <v-app-bar title="Todolist app"
                :class="`bg-teal`"
-               v-if="true"
+               v-if="false"
                flat></v-app-bar>
 
-    <v-navigation-drawer persistent>
-      <v-list></v-list>
+    <v-navigation-drawer persistent
+                         color="teal">
+      <v-list class="px-3 bg-teal"
+              nav>
+        <v-list-item v-for="(taskGroup, index) in taskGroupList"
+                     @click="toggleSelectedTaskgroup(taskGroup)"
+                     prepend-icon="mdi-plus">
+          <template v-slot:title>
+            <span class="text-capitalize text-truncate">{{ taskGroup.name }}</span>
+          </template>
+        </v-list-item>
+
+        <v-list-item @click="newTaskGroup"
+                     prepend-icon="mdi-plus"
+                     class="bg-white px-3"
+                     elevation="1"
+                     title="Add new task group">
+
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
 
     <v-row>
-      <!-- taskgroup list -->
-      <v-col cols="3">
-        <v-row>
-          <v-col cols="12"
-                 v-for="(taskGroup, index) in taskGroupList">
-            <v-btn class="w-100 text-capitalize text-truncate"
-                   :class="selectedTaskGroup.id == taskGroup.id ? `bg-${taskGroup.color}-lighten` : null"
-                   prepend-icon="mdi-format-list-bulleted"
-                   @click="toggleSelectedTaskgroup(taskGroup)">
-              {{ taskGroup.name }}
-            </v-btn>
-          </v-col>
-
-          <v-col>
-            <v-btn prepend-icon="mdi-plus"
-                   class="w-100 bg-teal"
-                   size="large"
-                   @click="newTaskGroup">
-              new task group
-            </v-btn>
-          </v-col>
-
-        </v-row>
-      </v-col>
-
       <!-- taskgroup view -->
       <v-col cols="5">
         <v-scroll-x-transition>
