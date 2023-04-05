@@ -13,7 +13,6 @@ function changeColor() {
 const taskInput = ref('');
 function addTask() {
   if (!taskInput.value) return;
-  // alert('new task: ' + taskInput.value);
 
   const newTask = {
 
@@ -35,8 +34,6 @@ function addTask() {
     }
   };
   taskGroup.value.taskList.push(newTask);
-
-
   taskInput.value = '';
 };
 

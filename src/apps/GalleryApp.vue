@@ -29,13 +29,16 @@ watch(states, (newState) => {
 });
 
 onMounted(() => {
+  restoreStates();
+});
+
+function restoreStates() {
   const storedState = JSON.parse(localStorage.getItem("galleryApp"));
   numberOfImagesToDisplay.value = storedState.numberOfImagesToDisplay ?? numberOfImagesToDisplay.value;
   columnNumber.value = storedState.columnNumber ?? columnNumber.value;
   colorize.value = storedState.colorize ?? colorize.value;
   randomizerFactor.value = storedState.randomizerFactor ?? randomizerFactor.value;
-
-});
+}
 </script>
 
 <template>

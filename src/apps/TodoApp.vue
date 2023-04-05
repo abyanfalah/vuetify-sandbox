@@ -54,12 +54,15 @@ watch(states, (newState) => {
 });
 
 onMounted(() => {
-  const storedState = JSON.parse(localStorage.getItem("todoapp"));
+  restoreStates();
+});
 
+function restoreStates() {
+  const storedState = JSON.parse(localStorage.getItem("todoapp"));
   taskGroupList.value = storedState.taskGroupList ?? taskGroupList.value;
   isViewingTaskGroup.value = storedState.isViewingTaskGroup ?? taskGroupList.value;
   selectedTaskGroup.value = storedState.selectedTaskGroup ?? taskGroupList.value;
-});
+}
 </script>
 
 <template>
@@ -70,7 +73,7 @@ onMounted(() => {
                flat></v-app-bar>
 
     <v-navigation-drawer persistent>
-      asdf
+      <v-list></v-list>
     </v-navigation-drawer>
 
     <v-row>
