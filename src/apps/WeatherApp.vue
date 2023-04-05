@@ -15,6 +15,8 @@ const isSearching = ref(false);
 const isCelsius = ref(true);
 const isShowingDetails = ref(false);
 const isError = ref(null);
+let lastHour;
+
 
 const tempColor = computed(() => {
   if (!currentWeather.value || !Object.keys(currentWeather.value).length) return 'white';
@@ -51,6 +53,7 @@ async function getWeatherData() {
     };
 
     const currentHour = new Date().getHours();
+    lastHour = currentHour;
 
     for (const aspect in weather.hourly) {
       currentWeather.value[aspect] = weather.hourly[aspect][currentHour];
@@ -87,7 +90,8 @@ const states = (() => {
     location: location.value,
     isCelsius: isCelsius.value,
     isShowingDetails: isShowingDetails.value,
-    currentWeather: currentWeather.value
+    currentWeather: currentWeather.value,
+    lastHour,
 
   };
 
@@ -98,13 +102,26 @@ watch(states, (newState) => {
 });
 
 onMounted(() => {
+  restoreStates();
+});
+
+function restoreStates() {
+  // restore states
   const storedState = JSON.parse(localStorage.getItem("weatherApp"));
   location.value = storedState.location ?? location.value;
   locationQuery.value = storedState.locationQuery ?? locationQuery.value;
   weatherData.value = storedState.weatherData ?? weatherData.value;
   currentWeather.value = storedState.currentWeather ?? currentWeather.value;
   isCelsius.value = storedState.isCelsius ?? isCelsius.value;
-})
+  lastHour = storedState.lastHour;
+
+
+  // get last location's weather when 1 hour has passed by
+  const currentHour = new Date().getHours();
+  if (currentHour > lastHour) {
+    getWeatherData();
+  }
+}
 
 </script>
 
