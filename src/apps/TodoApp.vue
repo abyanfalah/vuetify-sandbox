@@ -92,6 +92,7 @@ function restoreStates() {
                flat></v-app-bar>
 
     <v-navigation-drawer persistent
+                         elevation="3"
                          color="teal">
       <v-list class="px-3 bg-teal"
               nav>
@@ -125,10 +126,10 @@ function restoreStates() {
 
       <!-- selected task detail -->
       <v-col>
-        <v-scroll-x-transition>
+        <v-slide-x-transition>
           <TaskDetail v-if="isViewingTaskDetail"
                       :selected-task="selectedTask" />
-        </v-scroll-x-transition>
+        </v-slide-x-transition>
       </v-col>
     </v-row>
 
