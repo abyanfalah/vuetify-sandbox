@@ -135,6 +135,7 @@ function restoreStates() {
         <v-scroll-x-transition>
           <TaskList @see-task-detail="showTaskDetail"
                     @delete-task-group="deleteTaskgroup"
+                    @close-task-group="toggleSelectedTaskgroup"
                     v-if="isViewingTaskGroup"
                     :taskGroup="selectedTaskGroup" />
         </v-scroll-x-transition>
@@ -147,9 +148,8 @@ function restoreStates() {
                       :selected-task="selectedTask" />
         </v-slide-x-transition>
       </v-col>
+      <!-- {{ selectedTaskGroup }} -->
     </v-row>
 
   </div>
-
-  {{ selectedTask }}
 </template>

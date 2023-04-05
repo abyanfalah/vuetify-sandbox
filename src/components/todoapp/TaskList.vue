@@ -1,15 +1,13 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
 import todoAppModules from '@/services/todoAppModules';
 
-const emit = defineEmits(['seeTaskDetail', 'deleteTaskGroup']);
+const emit = defineEmits(['seeTaskDetail', 'deleteTaskGroup', 'closeTaskGroup']);
 const props = defineProps(['taskGroup']);
-const getColorByPriority = todoAppModules.getColorByPriority;
+// const getColorByPriority = todoAppModules.getColorByPriority;
 
 const taskGroup = ref({});
 const selectedTask = ref(null);
-
-
 
 function changeColor() {
   alert('coming soon');
@@ -20,7 +18,6 @@ function addTask() {
   if (!taskInput.value) return;
 
   const newTask = {
-
     task: taskInput.value,
     isDone: false,
     due: null,
@@ -71,6 +68,8 @@ onBeforeMount(() => {
                     label="Group name"
                     density="comfortable"
                     variant="underlined"
+                    prepend-icon="mdi-chevron-left"
+                    @click:prepend="emit('closeTaskGroup', taskGroup)"
                     color="teal"
                     :autofocus="taskGroup.name.toLowerCase().indexOf('task group ') > -1 ? true : false"
                     append-inner-icon="mdi-palette"
@@ -84,7 +83,6 @@ onBeforeMount(() => {
     <v-sheet class="mb-5 mt-10">
       <v-sheet v-for="(task, index) in taskGroup.taskList"
                :class="task.isDone ? 'text-disabled' : ''"
-               :color="getColorByPriority(task.priority)"
                class="mb-3 py-1 px-2 border d-flex justify-space-between align-center rounded">
 
         <!-- checkbox -->
@@ -112,7 +110,7 @@ onBeforeMount(() => {
                     class="rounded mt-5"
                     placeholder="Add new task"
                     clearable
-                    autofocus
+                    :autofocus="taskGroup.name.toLowerCase().indexOf('task group ') < 0 ? true : false"
                     label="+ New task"
                     append-inner-icon="mdi-plus"
                     @click:append-inner="addTask"
