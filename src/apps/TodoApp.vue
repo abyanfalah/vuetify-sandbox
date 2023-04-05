@@ -3,6 +3,7 @@ import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
 import TaskList from '@/components/todoapp/TaskList.vue';
 import TaskDetail from '@/components/todoapp/TaskDetail.vue';
+import ModalDeleteTaskGroup from '@/components/todoapp/ModalDeleteTaskGroup.vue';
 
 const taskGroupList = ref([]);
 const isViewingTaskGroup = ref(false);
@@ -10,6 +11,8 @@ const selectedTaskGroup = ref();
 
 const isViewingTaskDetail = ref(false);
 const selectedTask = ref();
+
+const showDeleteDialog = ref(false);
 
 
 function newTaskGroup() {
@@ -31,7 +34,7 @@ function newTaskGroup() {
   });
 }
 
-function toggleSelectedTaskgroup(taskGroup) {
+function toggleSelectedTaskGroup(taskGroup) {
   if (taskGroup == selectedTaskGroup.value) {
     selectedTaskGroup.value = null;
     isViewingTaskGroup.value = false;
@@ -45,16 +48,13 @@ function toggleSelectedTaskgroup(taskGroup) {
   }, 100);
 }
 
-function deleteTaskgroup(taskGroupToDelete) {
+function deleteTaskGroup(taskGroupToDelete) {
   let tgList = taskGroupList.value;
   tgList = tgList.filter((tg) => tg.id !== taskGroupToDelete.id);
 
   taskGroupList.value = tgList;
-  toggleSelectedTaskgroup(taskGroupToDelete);
-  console.clear();
-
-  console.log('to delete =>', taskGroupToDelete);
-  console.log('list now =>', taskGroupList.value);
+  toggleSelectedTaskGroup(taskGroupToDelete);
+  showDeleteDialog.value = false;
 }
 
 function showTaskDetail(task) {
@@ -112,7 +112,7 @@ function restoreStates() {
       <v-list class="px-3 bg-teal"
               nav>
         <v-list-item v-for="(taskGroup, index) in taskGroupList"
-                     @click="toggleSelectedTaskgroup(taskGroup)"
+                     @click="toggleSelectedTaskGroup(taskGroup)"
                      prepend-icon="mdi-plus">
           <template v-slot:title>
             <span class="text-capitalize text-truncate">{{ taskGroup.name }}</span>
@@ -134,8 +134,8 @@ function restoreStates() {
       <v-col cols="6">
         <v-scroll-x-transition>
           <TaskList @see-task-detail="showTaskDetail"
-                    @delete-task-group="deleteTaskgroup"
-                    @close-task-group="toggleSelectedTaskgroup"
+                    @delete-task-group="showDeleteDialog = true"
+                    @close-task-group="toggleSelectedTaskGroup"
                     v-if="isViewingTaskGroup"
                     :taskGroup="selectedTaskGroup" />
         </v-scroll-x-transition>
@@ -152,4 +152,9 @@ function restoreStates() {
     </v-row>
 
   </div>
+
+  <ModalDeleteTaskGroup v-model="showDeleteDialog"
+                        :taskGroup="selectedTaskGroup"
+                        @confirm-delete="deleteTaskGroup"
+                        @cancel-delete="showDeleteDialog = false" />
 </template>

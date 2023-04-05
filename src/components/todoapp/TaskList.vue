@@ -126,7 +126,6 @@ onBeforeMount(() => {
              variant="tonal"
              @click="emit('deleteTaskGroup', taskGroup)"
              prepend-icon="mdi-delete">Delete task group</v-btn>
-      => modal confirmation
     </v-card-actions>
   </v-card>
 </template>
