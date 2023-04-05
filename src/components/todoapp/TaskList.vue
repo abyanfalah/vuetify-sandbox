@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeMount, ref, watch } from 'vue';
 
-const emit = defineEmits(['changesMade']);
+const emit = defineEmits(['seeTaskDetail']);
 const props = defineProps(['taskGroup']);
 const taskGroup = ref({});
 
@@ -78,6 +78,7 @@ onBeforeMount(() => {
         <v-btn icon="mdi-chevron-right"
                flat
                class="bg-transparent"
+               @click="emit('seeTaskDetail', task)"
                density="comfortable"></v-btn>
 
       </v-sheet>

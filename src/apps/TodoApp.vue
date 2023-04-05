@@ -2,10 +2,14 @@
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
 import TaskList from '@/components/todoapp/TaskList.vue';
+import TaskDetail from '@/components/todoapp/TaskDetail.vue';
 
 const taskGroupList = ref([]);
 const isViewingTaskGroup = ref(false);
 const selectedTaskGroup = ref();
+
+const isViewingTaskDetail = ref(false);
+const selectedTask = ref();
 
 
 function newTaskGroup() {
@@ -40,6 +44,14 @@ function toggleSelectedTaskgroup(taskGroup) {
   }, 100);
 }
 
+function showTaskDetail(task) {
+  if (task == selectedTask.value) return;
+
+  isViewingTaskDetail.value = false;
+  selectedTask.value = task;
+  setTimeout(() => isViewingTaskDetail.value = true, 100);
+}
+
 const states = computed(() => {
   return {
     taskGroupList: taskGroupList.value,
@@ -51,6 +63,13 @@ const states = computed(() => {
 watch(states, (newState) => {
   newState = JSON.stringify(newState);
   localStorage.setItem('todoapp', newState);
+});
+
+watch(isViewingTaskGroup, (newState) => {
+  if (newState == false) {
+    isViewingTaskDetail.value = false;
+    selectedTask.value = null;
+  }
 });
 
 onMounted(() => {
@@ -96,16 +115,20 @@ function restoreStates() {
 
     <v-row>
       <!-- taskgroup view -->
-      <v-col cols="5">
+      <v-col cols="6">
         <v-scroll-x-transition>
-          <TaskList v-if="isViewingTaskGroup"
+          <TaskList @see-task-detail="showTaskDetail"
+                    v-if="isViewingTaskGroup"
                     :taskGroup="selectedTaskGroup" />
         </v-scroll-x-transition>
       </v-col>
 
       <!-- selected task detail -->
-      <v-col cols="4">
-        {{ taskGroupList }}
+      <v-col>
+        <v-scroll-x-transition>
+          <TaskDetail v-if="isViewingTaskDetail"
+                      :selected-task="selectedTask" />
+        </v-scroll-x-transition>
       </v-col>
     </v-row>
 
