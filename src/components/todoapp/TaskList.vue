@@ -7,7 +7,7 @@ const taskGroup = ref({});
 
 
 function changeColor() {
-  alert('change color');
+  alert('coming soon');
 }
 
 const taskInput = ref('');
@@ -16,6 +16,7 @@ function addTask() {
   // alert('new task: ' + taskInput.value);
 
   const newTask = {
+
     task: taskInput.value,
     isDone: false,
     due: null,
@@ -23,16 +24,21 @@ function addTask() {
     notes: null,
     addedAt: Date.now(),
     doneAt: null,
-    done: function () {
-      this.doneAt = Date.now();
-      this.isDone = true;
+    toggleDoneState: function () {
+      if (!this.isDone) {
+        this.doneAt = Date.now();
+        this.isDone = true;
+        return;
+      }
+      this.doneAt = null;
+      this.isDone = false;
     }
   };
   taskGroup.value.taskList.push(newTask);
 
 
   taskInput.value = '';
-}
+};
 
 onBeforeMount(() => {
   taskGroup.value = props.taskGroup;
@@ -57,20 +63,24 @@ onBeforeMount(() => {
 
 
     <v-sheet class="mb-5 mt-10">
-      <v-sheet class="mb-3 py-1 px-2 border d-flex justify-space-between align-center rounded"
-               v-for="(task, index) in taskGroup.taskList">
+      <v-sheet v-for="(task, index) in taskGroup.taskList"
+               :class="task.isDone ? 'text-disabled' : ''"
+               class="mb-3 py-1 px-2 border d-flex justify-space-between align-center rounded">
 
         <!-- checkbox -->
-        <v-checkbox-btn></v-checkbox-btn>
+        <v-checkbox-btn v-model="task.isDone"
+                        @click="task.toggleDoneState()"></v-checkbox-btn>
         <input type="text"
                @keydown.enter="$event.target.blur()"
                v-model="taskGroup.taskList[index].task"
-               class="w-100">
+               class="w-100"
+               :class="task.isDone ? 'text-disabled text-decoration-line-through' : ''">
 
 
         <!-- see detail btn -->
         <v-btn icon="mdi-chevron-right"
                flat
+               class="bg-transparent"
                density="comfortable"></v-btn>
 
       </v-sheet>
