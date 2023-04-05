@@ -66,11 +66,14 @@ onMounted(() => {
   <div :class="`h-100 bg-teal-lighten-4 pa-10`">
     <v-app-bar title="Todolist app"
                :class="`bg-teal`"
-               v-if="false"
+               v-if="true"
                flat></v-app-bar>
 
-    <v-row>
+    <v-navigation-drawer persistent>
+      asdf
+    </v-navigation-drawer>
 
+    <v-row>
       <!-- taskgroup list -->
       <v-col cols="3">
         <v-row>
@@ -97,15 +100,18 @@ onMounted(() => {
       </v-col>
 
       <!-- taskgroup view -->
-      <v-col cols="6">
+      <v-col cols="5">
         <v-scroll-x-transition>
           <TaskList v-if="isViewingTaskGroup"
                     :taskGroup="selectedTaskGroup" />
         </v-scroll-x-transition>
       </v-col>
-    </v-row>
 
-    <!-- selected task detail -->
+      <!-- selected task detail -->
+      <v-col cols="4">
+        {{ taskGroupList }}
+      </v-col>
+    </v-row>
 
   </div>
 </template>
