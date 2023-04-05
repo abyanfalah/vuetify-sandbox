@@ -12,7 +12,26 @@ function changeColor() {
 
 const taskInput = ref('');
 function addTask() {
-  alert(taskInput.value);
+  if (!taskInput.value) return;
+  // alert('new task: ' + taskInput.value);
+
+  const newTask = {
+    task: taskInput.value,
+    isDone: false,
+    due: null,
+    priority: 0,
+    notes: null,
+    addedAt: Date.now(),
+    doneAt: null,
+    done: function () {
+      this.doneAt = Date.now();
+      this.isDone = true;
+    }
+  };
+  taskGroup.value.taskList.push(newTask);
+
+
+  taskInput.value = '';
 }
 
 onBeforeMount(() => {
@@ -27,6 +46,8 @@ onBeforeMount(() => {
       <v-text-field v-model="taskGroup.name"
                     label="Group name"
                     density="comfortable"
+                    variant="underlined"
+                    color="teal"
                     append-inner-icon="mdi-palette"
                     @click:append-inner="changeColor"
                     hide-details>
@@ -35,42 +56,38 @@ onBeforeMount(() => {
     </v-card-title>
 
 
-    <v-sheet class="my-5">
-      <v-sheet class="mb-3 py-0 px-3 elevation-1 d-flex justify-space-between align-center rounded"
-               v-for="n in 5">
-        <!-- checkbox and task name -->
-        <div class="w-100">
-          <v-checkbox hide-details
-                      class="fill-width">
-          <template v-slot:label>
-            <input type="text"
-                   class="w-100">
-          </template>
-        </v-checkbox>
-        </div>
+    <v-sheet class="mb-5 mt-10">
+      <v-sheet class="mb-3 py-1 px-2 border d-flex justify-space-between align-center rounded"
+               v-for="(task, index) in taskGroup.taskList">
+
+        <!-- checkbox -->
+        <v-checkbox-btn></v-checkbox-btn>
+        <input type="text"
+               @keydown.enter="$event.target.blur()"
+               v-model="taskGroup.taskList[index].task"
+               class="w-100">
+
 
         <!-- see detail btn -->
-        <div>
-          <v-btn icon="mdi-chevron-right"
-                 flat
-                 density="comfortable"></v-btn>
-        </div>
+        <v-btn icon="mdi-chevron-right"
+               flat
+               density="comfortable"></v-btn>
+
       </v-sheet>
 
       <v-text-field hide-details
-                    density="compact"
-                    class="rounded"
-                    variant="solo"></v-text-field>
+                    density="comfortable"
+                    class="rounded mt-5"
+                    placeholder="Add new task"
+                    clearable
+                    label="+ New task"
+                    append-inner-icon="mdi-plus"
+                    @click:append-inner="addTask"
+                    @keydown.enter="addTask"
+                    v-model="taskInput"
+                    color="teal"
+                    variant="outlined"></v-text-field>
 
-      <v-sheet class="pa-3 rounded">
-        <!-- <input type="text"
-                                                                         class="w-100 "
-                                                                         placeholder="Add task"
-                                                                         v-model="taskInput"
-                                                                         append-icon="mdi-plus"
-                                                                         @keydown.enter="addTask"> -->
-
-      </v-sheet>
     </v-sheet>
   </v-card>
 </template>
