@@ -1,8 +1,11 @@
+<script setup>
+const props = defineProps(['size', 'width', 'color']);
+
+</script>
+
 <template>
-  <v-row class="fill-height ma-0"
-         align="center"
-         justify="center">
-    <v-progress-circular indeterminate
-                         color="orange lighten-1"></v-progress-circular>
-  </v-row>
+  <v-progress-circular indeterminate
+                       :width="props.width"
+                       :size="props.size"
+                       :color="props.color ?? 'warning'"></v-progress-circular>
 </template>

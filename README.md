@@ -1,4 +1,6 @@
-# default
+# Vuetify-sandbox
+
+This project is just a place where i can learn and experiment with Vuetify. It contains several mini projects.
 
 ## Project setup
 

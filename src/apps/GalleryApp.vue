@@ -13,15 +13,14 @@ const randomizeDialog = ref(false);
 function changeRandomizer() {
   randomizeDialog.value = false;
   randomizerFactor.value = Math.floor(Math.random() * 10);
-
-  // show a nice  overlay with progress
 }
 
 const states = computed(() => {
   return {
     numberOfImagesToDisplay: numberOfImagesToDisplay.value,
     columnNumber: columnNumber.value,
-    colorize: colorize.value
+    colorize: colorize.value,
+    randomizerFactor: randomizerFactor.value
   };
 });
 
@@ -30,16 +29,22 @@ watch(states, (newState) => {
 });
 
 onMounted(() => {
+  restoreStates();
+});
+
+function restoreStates() {
   const storedState = JSON.parse(localStorage.getItem("galleryApp"));
   numberOfImagesToDisplay.value = storedState.numberOfImagesToDisplay ?? numberOfImagesToDisplay.value;
   columnNumber.value = storedState.columnNumber ?? columnNumber.value;
   colorize.value = storedState.colorize ?? colorize.value;
-});
+  randomizerFactor.value = storedState.randomizerFactor ?? randomizerFactor.value;
+}
 </script>
 
 <template>
-  <div>
-    <v-app-bar color="warning"
+  <div class="ma-10">
+
+    <v-app-bar color="orange"
                title="Gallery app"
                flat>
       <template v-slot:append>
@@ -99,14 +104,13 @@ onMounted(() => {
           <v-col v-for="n in numberOfImagesToDisplay"
                  :cols="columnNumber">
             <v-card elevation="3">
-              <v-img :src="`https://picsum.photos/id/${randomizerFactor * 19 + n}/200${!colorize ? '?grayscale' : ''}`
-
-              "
-                     lazy-src="http://egyptianstreets.com/wp-content/uploads/2017/07/404.jpg"
+              <v-img :src="`https://picsum.photos/id/${randomizerFactor * 19 + n}/200${!colorize ? '?grayscale' : ''}`"
                      aspect-ratio="1"
                      :cover="true">
                 <template v-slot:placeholder>
-                  <ProgressCircular />
+                  <div class="fill-height d-flex align-center justify-center">
+                    <ProgressCircular />
+                  </div>
                 </template>
               </v-img>
             </v-card>

@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue';
 
 const emits = defineEmits(['selectPage']);
 
@@ -11,7 +10,8 @@ function toPage(page) {
 </script>
 
 <template>
-  <v-navigation-drawer rail
+  <v-navigation-drawer color="black"
+                       rail
                        rail-width="65"
                        expand-on-hover
                        elevation="1"
