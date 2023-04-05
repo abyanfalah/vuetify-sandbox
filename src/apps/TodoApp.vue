@@ -54,7 +54,11 @@ watch(states, (newState) => {
 });
 
 onMounted(() => {
+  const storedState = JSON.parse(localStorage.getItem("todoapp"));
 
+  taskGroupList.value = storedState.taskGroupList ?? taskGroupList.value;
+  isViewingTaskGroup.value = storedState.isViewingTaskGroup ?? taskGroupList.value;
+  selectedTaskGroup.value = storedState.selectedTaskGroup ?? taskGroupList.value;
 });
 </script>
 
