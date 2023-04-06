@@ -109,11 +109,23 @@ function restoreStates() {
     <v-navigation-drawer persistent
                          elevation="3"
                          color="teal">
+      <v-list>
+        <v-list-item class="ms-1"
+                     prepend-icon="mdi-list-box"
+                     size="x-large"
+                     title="Todo app"
+                     subtitle="Your daily helper"
+                     color="green" />
+      </v-list>
+
+      <v-divider></v-divider>
+
       <v-list class="px-3 bg-teal"
               nav>
+        <v-list-subheader color="white">Task groups</v-list-subheader>
         <v-list-item v-for="(taskGroup, index) in taskGroupList"
                      @click="toggleSelectedTaskGroup(taskGroup)"
-                     prepend-icon="mdi-plus">
+                     prepend-icon="mdi-format-list-checkbox">
           <template v-slot:title>
             <span class="text-capitalize text-truncate">{{ taskGroup.name }}</span>
           </template>
