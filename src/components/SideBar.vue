@@ -32,16 +32,19 @@ function toPage(page) {
             nav>
 
       <v-list-item prepend-icon="mdi-image"
+                   active-color="white"
                    title="Gallery"
                    value="gallery"
                    @click="toPage('gallery')" />
 
       <v-list-item prepend-icon="mdi-list-box"
+                   active-color="white"
                    title="Todo list"
                    value="todo"
                    @click="toPage('todo')" />
 
       <v-list-item prepend-icon="mdi-weather-partly-cloudy"
+                   active-color="white"
                    title="Weather"
                    value="weather"
                    @click="toPage('weather')" />
@@ -49,6 +52,7 @@ function toPage(page) {
       <v-divider class="my-3" />
 
       <v-list-item prepend-icon="mdi-test-tube"
+                   active-color="white"
                    title="Test page"
                    value="testpage"
                    @click="toPage('testpage')" />

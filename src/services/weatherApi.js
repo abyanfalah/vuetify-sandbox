@@ -15,7 +15,7 @@ export default {
     ).data.results[0];
 
     let weatherData = await axios.get(
-      `https://api.open-meteo.com/v1/forecast?latitude=${locationData.latitude}&longitude=${locationData.longitude}&hourly=temperature_2m,apparent_temperature,precipitation_probability,rain,showers,weathercode,visibility&timeformat=unixtime&forecast_days=1&timezone=${locationData.timezone}`
+      `https://api.open-meteo.com/v1/forecast?latitude=${locationData.latitude}&longitude=${locationData.longitude}&hourly=temperature_2m,apparent_temperature,precipitation_probability,rain,showers,weathercode,visibility&timeformat=unixtime&models=meteofrance_arpege_world&forecast_days=1&timezone=${locationData.timezone}`
     );
 
     const address = (
