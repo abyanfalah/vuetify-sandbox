@@ -87,6 +87,9 @@ const states = computed(() => {
     taskGroupList: taskGroupList.value,
     isViewingTaskGroup: isViewingTaskGroup.value,
     selectedTaskGroup: selectedTaskGroup.value,
+
+    isViewingTaskDetail: isViewingTaskDetail.value,
+    selectedTask: selectedTask.value,
   };
 });
 
@@ -111,8 +114,12 @@ function restoreStates() {
   if (storedState == null) return console.log('no storedState for todoapp');
 
   taskGroupList.value = storedState.taskGroupList ?? taskGroupList.value;
-  isViewingTaskGroup.value = storedState.isViewingTaskGroup ?? taskGroupList.value;
-  selectedTaskGroup.value = storedState.selectedTaskGroup ?? taskGroupList.value;
+
+  isViewingTaskGroup.value = storedState.isViewingTaskGroup ?? isViewingTaskGroup.value;
+  selectedTaskGroup.value = storedState.selectedTaskGroup ?? selectedTaskGroup.value;
+
+  isViewingTaskDetail.value = storedState.isViewingTaskDetail ?? isViewingTaskDetail.value;
+  selectedTask.value = storedState.selectedTask ?? selectedTask.value;
 }
 </script>
 
