@@ -21,19 +21,10 @@ function addTask() {
     task: taskInput.value,
     isDone: false,
     due: null,
-    priority: 0,
+    priority: 'Normal',
     notes: null,
     addedAt: Date.now(),
     doneAt: null,
-    toggleDoneState: function () {
-      if (!this.isDone) {
-        this.doneAt = Date.now();
-        this.isDone = true;
-        return;
-      }
-      this.doneAt = null;
-      this.isDone = false;
-    }
   };
   taskGroup.value.taskList.push(newTask);
   taskInput.value = '';
