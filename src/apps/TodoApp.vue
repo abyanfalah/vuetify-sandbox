@@ -65,6 +65,23 @@ function showTaskDetail(task) {
   setTimeout(() => isViewingTaskDetail.value = true, 100);
 }
 
+function markTaskDone(task) {
+  task.doneAt = Date.now();
+  task.isDone = true;
+  console.log(task);
+}
+
+function deleteTask(taskToDelete) {
+  const taskgroup = selectedTaskGroup.value;
+  let taskList = taskgroup.taskList;
+
+  taskList = taskList.filter((t) => t !== taskToDelete);
+  selectedTaskGroup.value.taskList = taskList;
+
+  isViewingTaskDetail.value = false;
+  selectedTask.value = null;
+}
+
 const states = computed(() => {
   return {
     taskGroupList: taskGroupList.value,
@@ -138,6 +155,7 @@ function restoreStates() {
                      title="Add new task group">
 
         </v-list-item>
+
       </v-list>
     </v-navigation-drawer>
 
@@ -145,7 +163,8 @@ function restoreStates() {
       <!-- taskgroup view -->
       <v-col cols="6">
         <v-scroll-x-transition>
-          <TaskList @see-task-detail="showTaskDetail"
+          <TaskList @mark-task-done="markTaskDone"
+                    @see-task-detail="showTaskDetail"
                     @delete-task-group="showDeleteDialog = true"
                     @close-task-group="toggleSelectedTaskGroup"
                     v-if="isViewingTaskGroup"
@@ -157,10 +176,11 @@ function restoreStates() {
       <v-col>
         <v-slide-x-transition>
           <TaskDetail v-if="isViewingTaskDetail"
+                      @mark-task-done="markTaskDone"
+                      @delete-task="deleteTask"
                       :selected-task="selectedTask" />
         </v-slide-x-transition>
       </v-col>
-      <!-- {{ selectedTaskGroup }} -->
     </v-row>
 
   </div>
