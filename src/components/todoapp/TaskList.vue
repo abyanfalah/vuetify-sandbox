@@ -3,7 +3,7 @@ import { onBeforeMount, ref, watch } from 'vue';
 import todoAppModules from '@/services/todoAppModules';
 
 const emit = defineEmits(['seeTaskDetail', 'markTaskDone', 'deleteTaskGroup', 'closeTaskGroup', 'clearCompletedTasks']);
-const props = defineProps(['taskGroup']);
+const props = defineProps(['taskGroup', 'selectedTask']);
 const getColorByPriority = todoAppModules.getColorByPriority;
 
 const taskGroup = ref({});
@@ -46,8 +46,10 @@ function toggleSelectTask(task) {
 }
 
 
+
 onBeforeMount(() => {
   taskGroup.value = props.taskGroup;
+  selectedTask.value = props.selectedTask ?? null;
 });
 </script>
 
@@ -145,12 +147,8 @@ onBeforeMount(() => {
                       v-model="taskInput"
                       color="teal"
                       variant="outlined"></v-text-field>
-
       </v-sheet>
     </v-card-item>
-
-    <!-- buttons -->
-
   </v-card>
 </template>
 
