@@ -9,6 +9,8 @@ const getColorByPriority = todoAppModules.getColorByPriority;
 const taskGroup = ref({});
 const selectedTask = ref(null);
 
+const hideCompletedTask = ref(false);
+
 function changeColor() {
   alert('coming soon');
 }
@@ -72,10 +74,18 @@ onBeforeMount(() => {
                            class="rounded"
                            @click="changeColor"></v-list-item>
 
+              <v-list-item :prepend-icon="`mdi-eye${!hideCompletedTask ? '-off' : ''}`"
+                           :title="`${hideCompletedTask ? 'Show' : 'Hide'} completed task`"
+                           class="rounded"
+                           @click="hideCompletedTask = !hideCompletedTask"></v-list-item>
+
+              <v-divider></v-divider>
+
               <v-list-item prepend-icon="mdi-broom"
                            title="Clear completed tasks"
                            class="rounded"
                            @click="emit('clearCompletedTasks')"></v-list-item>
+
 
               <v-list-item prepend-icon="mdi-delete"
                            title="Delete this task group"
@@ -108,7 +118,7 @@ onBeforeMount(() => {
     <v-card-item class="px-5">
       <v-sheet class="my-5">
         <v-sheet v-for="(task, index) in taskGroup.taskList"
-                 :class="task.isDone ? 'text-disabled' : ''"
+                 :class="{ 'text-disabled': task.isDone, 'd-none': task.isDone && hideCompletedTask }"
                  class="mb-3 py-1 px-2 border d-flex justify-space-between align-center rounded">
 
           <!-- checkbox -->
