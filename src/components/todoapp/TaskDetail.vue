@@ -48,7 +48,6 @@ onMounted(() => {
     <v-card-actions class="py-3 ">
       <v-btn v-if="!task.isDone"
              prepend-icon="mdi-check"
-             variant="default"
              :disabled="deleteTaskConfirmation"
              @click="emit('markTaskDone', task)"
              color="success">
@@ -64,7 +63,6 @@ onMounted(() => {
       <v-btn prepend-icon="mdi-delete"
              class="ms-auto"
              @click="deleteTaskConfirmation = true"
-             variant="default"
              color="red">
         <span v-if="deleteTaskConfirmation">
           Are you sure?
