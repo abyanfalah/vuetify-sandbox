@@ -98,9 +98,6 @@ onBeforeMount(() => {
         </v-text-field>
 
         <template v-slot:append>
-          <!-- <v-btn icon="mdi-palette"
-                                                                                                                                     @click="changeColor"></v-btn> -->
-
           <v-btn icon="mdi-close-circle"
                  @click="emit('closeTaskGroup', taskGroup)"></v-btn>
         </template>

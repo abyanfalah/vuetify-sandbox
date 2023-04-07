@@ -15,6 +15,7 @@ const selectedTask = ref();
 const showDeleteDialog = ref(false);
 
 
+// TaskGroup functions
 function newTaskGroup() {
   const taskGroupListLength = taskGroupList.value.length;
   const newTaskGroup = {
@@ -57,6 +58,7 @@ function deleteTaskGroup(taskGroupToDelete) {
   showDeleteDialog.value = false;
 }
 
+// Task functions
 function showTaskDetail(task) {
   if (task == selectedTask.value) return;
 
@@ -65,9 +67,16 @@ function showTaskDetail(task) {
   setTimeout(() => isViewingTaskDetail.value = true, 100);
 }
 
-function markTaskDone(task) {
-  task.doneAt = Date.now();
-  task.isDone = true;
+function toggleTaskDone(task) {
+  if (!task.isDone) {
+    task.doneAt = Date.now();
+    task.isDone = true;
+  } else {
+    task.doneAt = null;
+    task.isDone = false;
+  }
+
+
   console.log(task);
 }
 
@@ -85,6 +94,7 @@ function deleteTask(taskToDelete) {
 const states = computed(() => {
   return {
     taskGroupList: taskGroupList.value,
+
     isViewingTaskGroup: isViewingTaskGroup.value,
     selectedTaskGroup: selectedTaskGroup.value,
 
@@ -120,6 +130,8 @@ function restoreStates() {
 
   isViewingTaskDetail.value = storedState.isViewingTaskDetail ?? isViewingTaskDetail.value;
   selectedTask.value = storedState.selectedTask ?? selectedTask.value;
+
+  console.log(selectedTask.value);
 }
 </script>
 
@@ -170,12 +182,13 @@ function restoreStates() {
       <!-- taskgroup view -->
       <v-col cols="6">
         <v-scroll-x-transition>
-          <TaskList @mark-task-done="markTaskDone"
+          <TaskList @mark-task-done="toggleTaskDone"
                     @see-task-detail="showTaskDetail"
                     @delete-task-group="showDeleteDialog = true"
                     @close-task-group="toggleSelectedTaskGroup"
                     v-if="isViewingTaskGroup"
-                    :taskGroup="selectedTaskGroup" />
+                    :taskGroup="selectedTaskGroup"
+                    :selectedTask="selectedTask" />
         </v-scroll-x-transition>
       </v-col>
 
@@ -183,13 +196,12 @@ function restoreStates() {
       <v-col>
         <v-slide-x-transition>
           <TaskDetail v-if="isViewingTaskDetail"
-                      @mark-task-done="markTaskDone"
+                      @mark-task-done="toggleTaskDone"
                       @delete-task="deleteTask"
                       :selected-task="selectedTask" />
         </v-slide-x-transition>
       </v-col>
     </v-row>
-
   </div>
 
   <ModalDeleteTaskGroup v-model="showDeleteDialog"
