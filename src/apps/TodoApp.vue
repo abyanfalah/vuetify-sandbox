@@ -156,20 +156,23 @@ function restoreStates() {
 
       <v-divider></v-divider>
 
-      <v-list class="px-3 bg-teal"
-              nav>
+      <v-list class="px-3 bg-teal">
         <v-list-subheader color="white">Task groups</v-list-subheader>
         <v-list-item v-for="(taskGroup, index) in taskGroupList"
                      @click="toggleSelectedTaskGroup(taskGroup)"
-                     prepend-icon="mdi-format-list-checkbox">
+                     prepend-icon="mdi-format-list-checkbox"
+                     class="rounded"
+                     :class="{ 'bg-teal-lighten-4': taskGroup == selectedTaskGroup }">
+
           <template v-slot:title>
-            <span class="text-capitalize text-truncate">{{ taskGroup.name }}</span>
+            <span
+                  class="text-capitalize text-truncate">{{ taskGroup.name.length > 0 ? taskGroup.name : `Unnamed group ${++index}` }}</span>
           </template>
         </v-list-item>
 
         <v-list-item @click="newTaskGroup"
                      prepend-icon="mdi-plus"
-                     class="bg-white px-3"
+                     class="bg-white px-3 rounded mt-3"
                      elevation="1"
                      title="Add new task group">
 
