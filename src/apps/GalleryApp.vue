@@ -24,9 +24,9 @@ const states = computed(() => {
   };
 });
 
-watch(states, (newState) => {
+watch(() => states.value, (newState) => {
   localStorage.setItem("galleryApp", JSON.stringify(newState));
-});
+}, { deep: true });
 
 onMounted(() => {
   restoreStates();

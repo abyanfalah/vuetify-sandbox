@@ -97,9 +97,9 @@ const states = (() => {
 
 });
 
-watch(states, (newState) => {
+watch(() => states.value, (newState) => {
   localStorage.setItem("weatherApp", JSON.stringify(newState));
-});
+}, { deep: true });
 
 onMounted(() => {
   restoreStates();
