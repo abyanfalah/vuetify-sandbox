@@ -16,5 +16,5 @@ import { registerPlugins } from "@/plugins";
 const app = createApp(App);
 
 registerPlugins(app);
-document.title = "Vuetify sandbox";
+document.title = "Abyanf's sandbox";
 app.mount("#app");
