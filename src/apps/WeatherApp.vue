@@ -83,7 +83,7 @@ function toFahrenheit(n) {
   return (n * 1.8) + 32;
 }
 
-const states = (() => {
+const states = computed(() => {
   return {
     locationQuery: locationQuery.value,
     weatherData: weatherData.value,
