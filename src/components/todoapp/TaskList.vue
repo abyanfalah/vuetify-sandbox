@@ -8,12 +8,12 @@ const store = useTodoappStore();
 const taskInput = ref("");
 const hideCompletedTask = ref(false);
 
-const taskGroup = ref({});
 
 
 function addNewTask() {
   if (!taskInput.value) return;
   const newTask = {
+    id: crypto.randomUUID(),
     task: taskInput.value,
     isDone: false,
     due: null,
@@ -27,6 +27,8 @@ function addNewTask() {
   taskInput.value = '';
 }
 
+
+const taskGroup = ref({});
 onMounted(() => {
   taskGroup.value = store.selectedTaskGroup;
 })
@@ -101,7 +103,7 @@ onMounted(() => {
       </v-expand-transition>
 
       <v-sheet class="my-5">
-        <v-sheet v-for="(task, index) in taskGroup.taskList"
+        <v-sheet v-for="(task, index) in store.selectedTaskGroup.taskList"
                  :class="{ 'text-disabled': task.isDone }"
                  class="mb-3 py-1 px-2 border d-flex justify-space-between align-center rounded">
 

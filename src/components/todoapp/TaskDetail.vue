@@ -5,12 +5,7 @@ import { onMounted, ref } from 'vue';
 const store = useTodoappStore();
 
 const deleteTaskConfirmation = ref(false);
-const task = ref({});
 
-
-onMounted(() => {
-  task.value = store.selectedTask;
-});
 </script>
 
 <template>
@@ -20,21 +15,21 @@ onMounted(() => {
       <v-card-title class="pa-0">
         <v-text-field variant="underlined"
                       color="teal"
-                      v-model="task.task"
+                      v-model="store.selectedTask.task"
                       label="Task name"></v-text-field>
       </v-card-title>
 
       <!-- task priority -->
       <v-select label="Priority"
                 variant="underlined"
-                v-model="task.priority"
+                v-model="store.selectedTask.priority"
                 density="comfortable"
                 :items="['Urgent', 'High', 'Normal', 'Low']"></v-select>
 
       <!-- task additional nots -->
       <v-textarea label="Additional notes"
                   color="teal"
-                  v-model="task.notes"
+                  v-model="store.selectedTask.notes"
                   variant="outlined"></v-textarea>
 
 
@@ -45,15 +40,15 @@ onMounted(() => {
 
     <!-- buttons -->
     <v-card-actions class="py-3 ">
-      <v-btn v-if="!task.isDone"
+      <v-btn v-if="!store.selectedTask.isDone"
              prepend-icon="mdi-check"
-             @click="store.toggleTaskDone(task)"
-             :disabled="task.isDone || deleteTaskConfirmation"
+             @click="store.toggleTaskDone(store.selectedTask)"
+             :disabled="store.selectedTask.isDone || deleteTaskConfirmation"
              color="success">
         mark as done
       </v-btn>
 
-      <v-sheet v-if="task.isDone"
+      <v-sheet v-if="store.selectedTask.isDone"
                class="text-disabled rounded px-3 py-1">
         <v-icon icon="mdi-check"></v-icon>
         Task is done
@@ -79,7 +74,7 @@ onMounted(() => {
 
         <v-card-actions class="d-flex  justify-end">
           <v-btn variant="outlined"
-                 @click="store.deleteTask(task)"
+                 @click="store.deleteTask(store.selectedTask)"
                  color="red">
             Yes
           </v-btn>
