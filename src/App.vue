@@ -3,6 +3,7 @@ import { onBeforeMount, ref, watch } from 'vue';
 
 import SideBar from './components/SideBar.vue';
 
+import HomePage from './apps/HomePage.vue';
 import GalleryApp from './apps/GalleryApp.vue';
 import TestPage from './components/TestPage.vue';
 import TodoApp from './apps/TodoApp.vue';
@@ -12,6 +13,7 @@ import WeatherApp from './apps/WeatherApp.vue';
 const selectedApp = ref(null);
 
 const apps = {
+  'home': HomePage,
   'gallery': GalleryApp,
   'testpage': TestPage,
   'todo': TodoApp,
@@ -24,11 +26,11 @@ function changePage(to) {
 }
 
 watch(selectedApp, () => {
-  localStorage.setItem('vuetify-sandbox-current-app', selectedApp.value);
+  localStorage.setItem('abyanf-vuetify-sandbox-current-app', selectedApp.value);
 });
 
 onBeforeMount(() => {
-  selectedApp.value = localStorage.getItem('vuetify-sandbox-current-app') ?? null;
+  selectedApp.value = localStorage.getItem('abyanf-vuetify-sandbox-current-app') ?? 'home';
 })
 
 </script>
@@ -36,7 +38,8 @@ onBeforeMount(() => {
 <template>
   <v-app>
     <!-- sidebar -->
-    <SideBar @select-page="changePage" />
+    <SideBar @select-page="changePage"
+             :is-at-home="selectedApp == 'home'" />
 
     <!-- main content -->
     <v-main>

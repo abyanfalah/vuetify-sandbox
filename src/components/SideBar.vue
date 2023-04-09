@@ -1,7 +1,7 @@
 <script setup>
 
 const emits = defineEmits(['selectPage']);
-
+const props = defineProps(['isAtHome']);
 
 function toPage(page) {
   emits('selectPage', page);
@@ -31,11 +31,19 @@ function toPage(page) {
             density="compact"
             nav>
 
+      <v-list-item prepend-icon="mdi-home"
+                   active-color="white"
+                   title="Home"
+                   value="home"
+                   :active="isAtHome"
+                   @click="toPage('home')" />
+
       <v-list-item prepend-icon="mdi-image"
                    active-color="white"
                    title="Gallery"
                    value="gallery"
                    @click="toPage('gallery')" />
+
 
       <v-list-item prepend-icon="mdi-list-box"
                    active-color="white"
