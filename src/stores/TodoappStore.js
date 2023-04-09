@@ -46,10 +46,13 @@ export const useTodoappStore = defineStore("todoapp", () => {
     showDeleteDialog.value = false;
   }
 
-  function showTaskDetail(task) {
-    if (task == selectedTask.value) return;
-    //
-    selectedTask.value = task;
+  function toggleSelectedTask(task) {
+    if (task == selectedTask.value) {
+      selectedTask.value = null;
+      return;
+    }
+    selectedTask.value = null;
+    setTimeout(() => (selectedTask.value = task), 100);
   }
 
   function toggleTaskDone(task) {
@@ -141,7 +144,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
 
     // tasklist functions
     addTask,
-    // toggleSelectedTask,
+    toggleSelectedTask,
     toggleTaskDone,
 
     restoreStates,

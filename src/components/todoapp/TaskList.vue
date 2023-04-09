@@ -117,10 +117,10 @@ onMounted(() => {
                  :class="task.isDone ? 'text-disabled text-decoration-line-through' : ''">
 
           <!-- see detail btn -->
-          <v-btn :icon="`mdi-chevron-${selectedTask == task ? 'left' : 'right'}`"
+          <v-btn :icon="`mdi-chevron-${store.selectedTask == task ? 'left' : 'right'}`"
                  flat
-                 :class="selectedTask == task ? 'bg-black' : 'bg-transparent'"
-                 @click="toggleSelectTask(task)"
+                 :class="store.selectedTask == task ? 'bg-grey' : 'bg-transparent'"
+                 @click="store.toggleSelectedTask(task)"
                  density="comfortable"></v-btn>
 
         </v-sheet>

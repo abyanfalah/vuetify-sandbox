@@ -1,15 +1,11 @@
 <script setup>
-import { onBeforeMount, onMounted, ref, watch } from 'vue';
+import { useTodoappStore } from '@/stores/TodoappStore';
+import { onMounted, ref } from 'vue';
 
-
-const emit = defineEmits(['markTaskDone', 'deleteTask']);
-const props = defineProps(['selectedTask']);
+const store = useTodoappStore();
 const task = ref({});
-
-const deleteTaskConfirmation = ref(false);
-
 onMounted(() => {
-  task.value = props.selectedTask;
+  task.value = store.selectedTask;
 });
 </script>
 

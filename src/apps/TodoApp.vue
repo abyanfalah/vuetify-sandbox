@@ -49,13 +49,12 @@ onMounted(() => {
                   class="text-capitalize text-truncate">{{ taskGroup.name.length > 0 ? taskGroup.name : `Unnamed group ${++index}` }}</span>
           </template>
         </v-list-item>
-
       </v-list>
+
       <v-btn prepend-icon="mdi-plus"
              color="white"
              class="ms-5 my-3"
              @click="store.newTaskGroup">new task group
-
       </v-btn>
 
       <v-btn prepend-icon="mdi-delete"
@@ -80,9 +79,7 @@ onMounted(() => {
           <TaskDetail v-if="store.selectedTask" />
         </v-slide-x-transition>
 
-
-
-
+        {{ store.taskGroupList }}
       </v-col>
     </v-row>
   </div>
