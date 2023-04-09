@@ -2,59 +2,14 @@
 import { computed, onBeforeMount, ref, watch } from 'vue';
 import todoAppModules from '@/services/todoAppModules';
 import TaskgroupColorPickerVue from './TaskgroupColorPicker.vue';
+import { useTodoappStore } from '@/stores/TodoappStore';
 
-const emit = defineEmits(['seeTaskDetail', 'markTaskDone', 'deleteTaskGroup', 'closeTaskGroup', 'clearCompletedTasks', 'showColorPicker']);
-const props = defineProps(['taskGroup', 'selectedTask']);
-const getColorByPriority = todoAppModules.getColorByPriority;
-
-const taskGroup = ref({});
-const selectedTask = ref(null);
-const showColorPicker = ref(false);
-
+const store = useTodoappStore();
+const taskInput = ref("");
 const hideCompletedTask = ref(false);
 
-function changeColor() {
-  alert('coming soon');
-}
+const taskGroup = computed(() => store.selectedTaskGroup)
 
-const taskInput = ref('');
-function addTask() {
-  if (!taskInput.value) return;
-
-  const newTask = {
-    task: taskInput.value,
-    isDone: false,
-    due: null,
-    priority: 'Normal',
-    notes: null,
-    addedAt: Date.now(),
-    doneAt: null,
-  };
-  taskGroup.value.taskList.push(newTask);
-  taskInput.value = '';
-};
-
-function selectTask(task) {
-  emit('seeTaskDetail', task);
-  selectedTask.value = task;
-}
-
-function toggleSelectTask(task) {
-  if (selectedTask.value == task) {
-    selectedTask.value = null;
-    emit('seeTaskDetail', null);
-  } else {
-    selectTask(task);
-  }
-
-}
-
-
-
-onBeforeMount(() => {
-  taskGroup.value = props.taskGroup;
-  selectedTask.value = props.selectedTask ?? null;
-});
 </script>
 
 <template>
@@ -92,7 +47,7 @@ onBeforeMount(() => {
                            title="Delete this task group"
                            class="bg-red rounded"
                            variant="outlined"
-                           @click="emit('deleteTaskGroup', taskGroup)"></v-list-item>
+                           @click="store.showDeleteDialog = true"></v-list-item>
             </v-list>
           </v-menu>
         </template>
@@ -110,7 +65,7 @@ onBeforeMount(() => {
 
         <template v-slot:append>
           <v-btn icon="mdi-close-circle"
-                 @click="emit('closeTaskGroup', taskGroup)"></v-btn>
+                 @click="store.selectedTaskGroup = null"></v-btn>
         </template>
 
 
