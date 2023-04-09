@@ -3,6 +3,7 @@ import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
 import ProgressCircular from '@/components/ProgressCircular.vue';
 import ModalConfirmRandomize from '@/components/galleryapp/ModalConfirmRandomize.vue';
+import BackToTopButton from '@/components/BackToTopButton.vue';
 
 const numberOfImagesToDisplay = ref(5);
 const columnNumber = ref(3);
@@ -33,16 +34,19 @@ onMounted(() => {
 });
 
 function restoreStates() {
+  2;
   const storedState = JSON.parse(localStorage.getItem("galleryApp"));
   numberOfImagesToDisplay.value = storedState.numberOfImagesToDisplay ?? numberOfImagesToDisplay.value;
   columnNumber.value = storedState.columnNumber ?? columnNumber.value;
   colorize.value = storedState.colorize ?? colorize.value;
   randomizerFactor.value = storedState.randomizerFactor ?? randomizerFactor.value;
 }
+
+const showBackToTopButton = computed(() => window.scrollY > 30);
 </script>
 
 <template>
-  <div class="ma-10">
+  <v-container>
 
     <v-app-bar color="orange"
                title="Gallery app"
@@ -118,5 +122,9 @@ function restoreStates() {
         </v-row>
       </v-card>
     </v-lazy>
-  </div>
+
+
+    <BackToTopButton btnColor="orange" />
+
+  </v-container>
 </template>
