@@ -1,3 +1,4 @@
+import todoappService from "@/services/todoappService";
 import { computed } from "@vue/reactivity";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { ref, watch } from "vue";
@@ -12,9 +13,6 @@ export const useTodoappStore = defineStore("todoapp", () => {
 
   // ======== TaskGroup functions
   function newTaskGroup() {
-    alert("new tg bruh hehe just kidding");
-    return;
-
     const newTaskGroup = {
       id: crypto.randomUUID(),
       color: "white",
@@ -32,9 +30,9 @@ export const useTodoappStore = defineStore("todoapp", () => {
   function toggleSelectedTaskGroup(taskGroup) {
     if (taskGroup == selectedTaskGroup.value) {
       selectedTaskGroup.value = null;
-
       return;
     }
+
     selectedTaskGroup.value = null;
     setTimeout(() => (selectedTaskGroup.value = taskGroup), 200);
   }
@@ -50,7 +48,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
 
   function showTaskDetail(task) {
     if (task == selectedTask.value) return;
-
+    //
     selectedTask.value = task;
   }
 
@@ -62,8 +60,6 @@ export const useTodoappStore = defineStore("todoapp", () => {
       task.doneAt = null;
       task.isDone = false;
     }
-
-    console.log(task);
   }
 
   function deleteTask(taskToDelete) {
@@ -83,34 +79,13 @@ export const useTodoappStore = defineStore("todoapp", () => {
     alert("coming soon");
   }
 
-  function addTask() {
-    if (!taskInput.value) return;
-
-    const newTask = {
-      task: taskInput.value,
-      isDone: false,
-      due: null,
-      priority: "Normal",
-      notes: null,
-      addedAt: Date.now(),
-      doneAt: null,
-    };
-    taskGroup.value.taskList.push(newTask);
-    taskInput.value = "";
+  function addTask(newTask) {
+    const taskGroupIndex = todoappService.getTaskGroupIndex(
+      selectedTaskGroup.value
+    );
+    taskGroupList.value[taskGroupIndex].taskList.push(newTask);
   }
 
-  function selectTask(task) {
-    emit("seeTaskDetail", task);
-    selectedTask.value = task;
-  }
-
-  function toggleSelectTask(task) {
-    if (selectedTask.value == task) {
-      selectedTask.value = null;
-    } else {
-      selectTask(task);
-    }
-  }
   // ============= taskDetail.vue
   const deleteTaskConfirmation = ref(false);
 
@@ -156,9 +131,17 @@ export const useTodoappStore = defineStore("todoapp", () => {
     selectedTask,
     showDeleteDialog,
 
+    showColorPicker,
+
+    // taskgroup functions
     newTaskGroup,
     toggleSelectedTaskGroup,
     deleteTaskGroup,
+
+    // tasklist functions
+    addTask,
+    // toggleSelectedTask,
+    toggleTaskDone,
 
     restoreStates,
   };

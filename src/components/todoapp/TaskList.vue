@@ -1,6 +1,6 @@
 <script setup>
-import { computed, onBeforeMount, ref, watch } from 'vue';
-import todoAppModules from '@/services/todoAppModules';
+import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
+import todoAppModules from '@/services/todoappService';
 import TaskgroupColorPickerVue from './TaskgroupColorPicker.vue';
 import { useTodoappStore } from '@/stores/TodoappStore';
 
@@ -8,7 +8,27 @@ const store = useTodoappStore();
 const taskInput = ref("");
 const hideCompletedTask = ref(false);
 
-const taskGroup = computed(() => store.selectedTaskGroup)
+const taskGroup = ref({});
+
+function addNewTask() {
+  if (!taskInput.value) return;
+  const newTask = {
+    task: taskInput.value,
+    isDone: false,
+    due: null,
+    priority: "Normal",
+    notes: null,
+    addedAt: Date.now(),
+    doneAt: null,
+  };
+
+  store.addTask(newTask);
+  taskInput.value = '';
+}
+
+onMounted(() => {
+  taskGroup.value = store.selectedTaskGroup;
+})
 
 </script>
 
@@ -18,6 +38,8 @@ const taskGroup = computed(() => store.selectedTaskGroup)
     <v-card-title class="pa-0">
       <v-toolbar class="py-3"
                  color="white">
+
+        <!-- taskgroup menu -->
         <template v-slot:prepend>
           <v-btn icon="mdi-dots-vertical"
                  id="menu-activator"></v-btn>
@@ -40,7 +62,7 @@ const taskGroup = computed(() => store.selectedTaskGroup)
               <v-list-item prepend-icon="mdi-broom"
                            title="Clear completed tasks"
                            class="rounded"
-                           @click="emit('clearCompletedTasks')"></v-list-item>
+                           @click=""></v-list-item>
 
 
               <v-list-item prepend-icon="mdi-delete"
@@ -52,24 +74,21 @@ const taskGroup = computed(() => store.selectedTaskGroup)
           </v-menu>
         </template>
 
-
+        <!-- taskgroup name -->
         <v-text-field class="mx-3"
-                      v-model="taskGroup.name"
                       label="Group name"
                       density="comfortable"
                       variant="underlined"
+                      v-model="store.selectedTaskGroup.name"
                       color="teal"
-                      :autofocus="taskGroup.name.toLowerCase().indexOf('task group ') > -1 ? true : false"
                       hide-details>
         </v-text-field>
 
+        <!-- btn close -->
         <template v-slot:append>
           <v-btn icon="mdi-close-circle"
                  @click="store.selectedTaskGroup = null"></v-btn>
         </template>
-
-
-
       </v-toolbar>
     </v-card-title>
 
@@ -77,22 +96,23 @@ const taskGroup = computed(() => store.selectedTaskGroup)
     <v-card-item class="px-5">
       <v-expand-transition>
         <TaskgroupColorPickerVue class="mb-3"
-                                 v-if="showColorPicker" />
+                                 v-if="store.showColorPicker" />
       </v-expand-transition>
 
       <v-sheet class="my-5">
+        {{ taskGroup }}
         <v-sheet v-for="(task, index) in taskGroup.taskList"
-                 :class="{ 'text-disabled': task.isDone, 'd-none': task.isDone && hideCompletedTask }"
+                 :class="{ 'text-disabled': task.isDone }"
                  class="mb-3 py-1 px-2 border d-flex justify-space-between align-center rounded">
 
           <!-- checkbox -->
           <v-checkbox-btn v-model="task.isDone"
-                          @click="emit('markTaskDone', task)"></v-checkbox-btn>
+                          @click="store.toggleTaskDone(task)"></v-checkbox-btn>
 
           <!-- task text -->
           <input type="text"
                  @keydown.enter="$event.target.blur()"
-                 v-model="taskGroup.taskList[index].task"
+                 v-model="task.task"
                  class="w-100"
                  :class="task.isDone ? 'text-disabled text-decoration-line-through' : ''">
 
@@ -102,6 +122,7 @@ const taskGroup = computed(() => store.selectedTaskGroup)
                  :class="selectedTask == task ? 'bg-black' : 'bg-transparent'"
                  @click="toggleSelectTask(task)"
                  density="comfortable"></v-btn>
+
         </v-sheet>
 
         <!-- task input -->
@@ -110,11 +131,10 @@ const taskGroup = computed(() => store.selectedTaskGroup)
                       class="rounded mt-5"
                       placeholder="Add new task"
                       clearable
-                      :autofocus="taskGroup.name.toLowerCase().indexOf('task group ') < 0 ? true : false"
                       label="+ New task"
                       append-inner-icon="mdi-plus"
-                      @click:append-inner="addTask"
-                      @keydown.enter="addTask"
+                      @click:append-inner="addNewTask"
+                      @keydown.enter="addNewTask"
                       v-model="taskInput"
                       color="teal"
                       variant="outlined"></v-text-field>

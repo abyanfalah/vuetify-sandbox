@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from '@vue/reactivity';
-import { onMounted, ref, watch } from 'vue';
+import { getCurrentInstance, onMounted, ref, watch } from 'vue';
 
 import TaskList from '@/components/todoapp/TaskList.vue';
 import TaskDetail from '@/components/todoapp/TaskDetail.vue';
@@ -8,10 +8,12 @@ import ModalDeleteTaskGroup from '@/components/todoapp/ModalDeleteTaskGroup.vue'
 import { useTodoappStore } from '@/stores/TodoappStore';
 
 const store = useTodoappStore();
-const _ = ref({});
 
-function test() {
-  alert('hey');
+
+// TODO: delete this function later
+function emptyLocalstorage() {
+  localStorage.removeItem('todoapp');
+  window.location.reload();
 }
 
 onMounted(() => {
@@ -51,8 +53,15 @@ onMounted(() => {
       </v-list>
       <v-btn prepend-icon="mdi-plus"
              color="white"
-             class="ms-5"
+             class="ms-5 my-3"
              @click="store.newTaskGroup">new task group
+
+      </v-btn>
+
+      <v-btn prepend-icon="mdi-delete"
+             color="red"
+             class="ms-5 my-3 "
+             @click="emptyLocalstorage">localstorage
 
       </v-btn>
     </v-navigation-drawer>
@@ -63,6 +72,8 @@ onMounted(() => {
         <v-scroll-x-transition>
           <TaskList v-if="store.selectedTaskGroup" />
         </v-scroll-x-transition>
+
+        {{ store.taskGroupList }}
       </v-col>
 
       <!-- selected task detail -->
@@ -70,6 +81,10 @@ onMounted(() => {
         <v-slide-x-transition>
           <TaskDetail v-if="store.selectedTask" />
         </v-slide-x-transition>
+
+        <div v-if="store.selectedTaskGroup">
+          {{ store.selectedTaskGroup.taskList }}
+        </div>
       </v-col>
     </v-row>
   </div>
