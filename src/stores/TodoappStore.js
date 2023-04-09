@@ -105,7 +105,8 @@ export const useTodoappStore = defineStore("todoapp", () => {
     (newState) => {
       newState = JSON.stringify(newState);
       localStorage.setItem("todoapp", newState);
-    }
+    },
+    { deep: true }
   );
 
   function restoreStates() {
@@ -144,6 +145,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
     toggleTaskDone,
 
     restoreStates,
+    states,
   };
 });
 

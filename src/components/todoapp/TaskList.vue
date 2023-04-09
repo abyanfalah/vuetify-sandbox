@@ -10,6 +10,7 @@ const hideCompletedTask = ref(false);
 
 const taskGroup = ref({});
 
+
 function addNewTask() {
   if (!taskInput.value) return;
   const newTask = {
@@ -100,7 +101,6 @@ onMounted(() => {
       </v-expand-transition>
 
       <v-sheet class="my-5">
-        {{ taskGroup }}
         <v-sheet v-for="(task, index) in taskGroup.taskList"
                  :class="{ 'text-disabled': task.isDone }"
                  class="mb-3 py-1 px-2 border d-flex justify-space-between align-center rounded">

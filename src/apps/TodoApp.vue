@@ -72,8 +72,6 @@ onMounted(() => {
         <v-scroll-x-transition>
           <TaskList v-if="store.selectedTaskGroup" />
         </v-scroll-x-transition>
-
-        {{ store.taskGroupList }}
       </v-col>
 
       <!-- selected task detail -->
@@ -82,9 +80,9 @@ onMounted(() => {
           <TaskDetail v-if="store.selectedTask" />
         </v-slide-x-transition>
 
-        <div v-if="store.selectedTaskGroup">
-          {{ store.selectedTaskGroup.taskList }}
-        </div>
+
+
+
       </v-col>
     </v-row>
   </div>
