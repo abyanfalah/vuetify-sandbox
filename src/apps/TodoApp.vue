@@ -17,11 +17,11 @@ const showDeleteDialog = ref(false);
 
 // TaskGroup functions
 function newTaskGroup() {
-  const taskGroupListLength = taskGroupList.value.length;
+
   const newTaskGroup = {
-    id: taskGroupListLength,
+    id: crypto.randomUUID(),
     color: 'white',
-    name: `Task group ${taskGroupListLength + 1}`,
+    name: `New taskgroup`,
     taskList: [],
     priority: 'Normal'
   };
