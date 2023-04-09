@@ -78,8 +78,6 @@ onMounted(() => {
         <v-slide-x-transition>
           <TaskDetail v-if="store.selectedTask" />
         </v-slide-x-transition>
-
-        {{ store.taskGroupList }}
       </v-col>
     </v-row>
   </div>
