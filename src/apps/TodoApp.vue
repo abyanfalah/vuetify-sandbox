@@ -42,7 +42,8 @@ onMounted(() => {
         <v-list-item v-for="(taskGroup, index) in store.taskGroupList"
                      @click="store.toggleSelectedTaskGroup(taskGroup)"
                      prepend-icon="mdi-format-list-checkbox"
-                     class="rounded">
+                     :class="{ 'bg-white': taskGroup == store.selectedTaskGroup }"
+                     class="rounded mb-2">
 
           <template v-slot:title>
             <span

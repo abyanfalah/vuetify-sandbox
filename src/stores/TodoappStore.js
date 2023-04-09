@@ -39,7 +39,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
     }
 
     selectedTaskGroup.value = null;
-    setTimeout(() => (selectedTaskGroup.value = taskGroup), 200);
+    setTimeout(() => (selectedTaskGroup.value = taskGroup), 100);
   }
 
   function deleteTaskGroup(taskGroupToDelete) {
