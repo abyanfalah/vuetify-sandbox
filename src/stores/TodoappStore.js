@@ -92,6 +92,10 @@ export const useTodoappStore = defineStore("todoapp", () => {
   // ============= taskDetail.vue
   const deleteTaskConfirmation = ref(false);
 
+  watch(selectedTaskGroup, (newVal) => {
+    if (newVal == null) selectedTask.value = null;
+  });
+
   // ============= states retrieval
   const states = computed(() => {
     return {
