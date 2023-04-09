@@ -150,9 +150,10 @@ export const useTodoappStore = defineStore("todoapp", () => {
     addTask,
     toggleSelectedTask,
     toggleTaskDone,
+    deleteTask,
 
-    restoreStates,
     states,
+    restoreStates,
   };
 });
 
