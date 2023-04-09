@@ -1,9 +1,11 @@
 <script setup>
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
+
 import TaskList from '@/components/todoapp/TaskList.vue';
 import TaskDetail from '@/components/todoapp/TaskDetail.vue';
 import ModalDeleteTaskGroup from '@/components/todoapp/ModalDeleteTaskGroup.vue';
+
 
 const taskGroupList = ref([]);
 const isViewingTaskGroup = ref(false);
@@ -103,7 +105,7 @@ const states = computed(() => {
   };
 });
 
-watch(states, (newState) => {
+watch(() => states.value, (newState) => {
   newState = JSON.stringify(newState);
   localStorage.setItem('todoapp', newState);
 });
@@ -130,8 +132,6 @@ function restoreStates() {
 
   isViewingTaskDetail.value = storedState.isViewingTaskDetail ?? isViewingTaskDetail.value;
   selectedTask.value = storedState.selectedTask ?? selectedTask.value;
-
-  console.log(selectedTask.value);
 }
 </script>
 

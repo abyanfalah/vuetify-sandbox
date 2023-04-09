@@ -1,13 +1,15 @@
 <script setup>
-import { onBeforeMount, ref, watch } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import todoAppModules from '@/services/todoAppModules';
+import TaskgroupColorPickerVue from './TaskgroupColorPicker.vue';
 
-const emit = defineEmits(['seeTaskDetail', 'markTaskDone', 'deleteTaskGroup', 'closeTaskGroup', 'clearCompletedTasks']);
+const emit = defineEmits(['seeTaskDetail', 'markTaskDone', 'deleteTaskGroup', 'closeTaskGroup', 'clearCompletedTasks', 'showColorPicker']);
 const props = defineProps(['taskGroup', 'selectedTask']);
 const getColorByPriority = todoAppModules.getColorByPriority;
 
 const taskGroup = ref({});
 const selectedTask = ref(null);
+const showColorPicker = ref(false);
 
 const hideCompletedTask = ref(false);
 
@@ -56,8 +58,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <v-card :class="`bg-${taskGroup.color}`"
-          elevation="3"
+  <v-card elevation="3"
           class="rounded">
     <v-card-title class="pa-0">
       <v-toolbar class="py-3"
@@ -72,7 +73,7 @@ onBeforeMount(() => {
               <v-list-item prepend-icon="mdi-palette"
                            title="Change color"
                            class="rounded"
-                           @click="changeColor"></v-list-item>
+                           @click="showColorPicker = !showColorPicker"></v-list-item>
 
               <v-list-item :prepend-icon="`mdi-eye${!hideCompletedTask ? '-off' : ''}`"
                            :title="`${hideCompletedTask ? 'Show' : 'Hide'} completed task`"
@@ -111,11 +112,19 @@ onBeforeMount(() => {
           <v-btn icon="mdi-close-circle"
                  @click="emit('closeTaskGroup', taskGroup)"></v-btn>
         </template>
+
+
+
       </v-toolbar>
     </v-card-title>
 
     <!-- task items -->
     <v-card-item class="px-5">
+      <v-expand-transition>
+        <TaskgroupColorPickerVue class="mb-3"
+                                 v-if="showColorPicker" />
+      </v-expand-transition>
+
       <v-sheet class="my-5">
         <v-sheet v-for="(task, index) in taskGroup.taskList"
                  :class="{ 'text-disabled': task.isDone, 'd-none': task.isDone && hideCompletedTask }"
