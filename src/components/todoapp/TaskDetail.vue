@@ -14,13 +14,14 @@ const deleteTaskConfirmation = ref(false);
     <v-container class="pa-5 pb-0">
       <v-card-title class="pa-0">
         <v-text-field variant="underlined"
-                      color="teal"
+                      :color="store.currentTaskGroupColor"
                       v-model="store.selectedTask.task"
                       label="Task name"></v-text-field>
       </v-card-title>
 
       <!-- task priority -->
       <v-select label="Priority"
+                :color="store.currentTaskGroupColor"
                 variant="underlined"
                 v-model="store.selectedTask.priority"
                 density="comfortable"
@@ -28,7 +29,7 @@ const deleteTaskConfirmation = ref(false);
 
       <!-- task additional nots -->
       <v-textarea label="Additional notes"
-                  color="teal"
+                  :color="store.currentTaskGroupColor"
                   v-model="store.selectedTask.notes"
                   variant="outlined"></v-textarea>
 
@@ -44,7 +45,7 @@ const deleteTaskConfirmation = ref(false);
              prepend-icon="mdi-check"
              @click="store.toggleTaskDone(store.selectedTask)"
              :disabled="store.selectedTask.isDone || deleteTaskConfirmation"
-             color="success">
+             :color="store.currentTaskGroupColor">
         mark as done
       </v-btn>
 

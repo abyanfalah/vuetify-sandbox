@@ -1,7 +1,12 @@
 <script setup>
 import { useTodoappStore } from '@/stores/TodoappStore';
+import { computed } from 'vue';
 
 const store = useTodoappStore();
+
+const isSelected = computed((taskgroup) => {
+  return taskgroup == store.selectedTaskGroup;
+});
 </script>
 
 <template>
@@ -23,7 +28,7 @@ const store = useTodoappStore();
       <v-list-item v-for="(taskGroup, index) in store.taskGroupList"
                    @click="store.toggleSelectedTaskGroup(taskGroup)"
                    prepend-icon="mdi-format-list-checkbox"
-                   :class="{ 'bg-white': taskGroup == store.selectedTaskGroup }"
+                   :style="{ backgroundColor: taskGroup.color }"
                    class="rounded mb-2">
 
         <template v-slot:title>

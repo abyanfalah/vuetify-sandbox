@@ -10,7 +10,11 @@ const hideCompletedTask = ref(false);
 const showColorPicker = ref(false);
 
 const clearCompletedTaskConfirmation = ref(false);
-const selectedColor = ref('');
+
+const taskGroupColor = computed(() => {
+  return store.selectedTaskGroup.color;
+});
+
 
 function addNewTask() {
   if (!taskInput.value) return;
@@ -41,11 +45,8 @@ onMounted(() => {
   <v-card elevation="3"
           class="rounded">
     <v-card-title class="pa-0">
-
-      <v-toolbar class="py-3">
-
-
-
+      <v-toolbar class="py-3"
+                 color="white">
         <!-- taskgroup menu -->
         <template v-slot:prepend>
           <v-btn icon="mdi-dots-vertical"
@@ -89,8 +90,11 @@ onMounted(() => {
                       density="comfortable"
                       variant="underlined"
                       v-model="store.selectedTaskGroup.name"
-                      color="teal"
+                      :color="taskGroupColor"
+                      @keydown.enter="$event.target.blur()"
+                      :autofocus="store.selectedTaskGroup.name == 'New taskgroup'"
                       hide-details>
+
         </v-text-field>
 
         <!-- btn close -->
@@ -101,13 +105,14 @@ onMounted(() => {
       </v-toolbar>
     </v-card-title>
 
-    <!-- task items -->
     <v-card-item class="px-5">
 
+      <!-- color picker & clear confirmation -->
       <v-expand-transition>
         <TaskgroupColorPickerVue class="mb-3"
                                  @close-color-picker="showColorPicker = false"
                                  v-if="showColorPicker" />
+
         <v-sheet v-if="clearCompletedTaskConfirmation"
                  class="d-flex justify-center align-center flex-column">
           <span>
@@ -129,8 +134,7 @@ onMounted(() => {
 
       </v-expand-transition>
 
-
-
+      <!-- task items -->
       <v-sheet class="my-5">
         <v-sheet v-for="(task, index) in store.selectedTaskGroup.taskList"
                  :class="{ 'text-disabled': task.isDone }"
@@ -138,6 +142,7 @@ onMounted(() => {
 
           <!-- checkbox -->
           <v-checkbox-btn v-model="task.isDone"
+                          :color="taskGroupColor"
                           @click="store.toggleTaskDone(task)"></v-checkbox-btn>
 
           <!-- task text -->
@@ -167,7 +172,8 @@ onMounted(() => {
                       @click:append-inner="addNewTask"
                       @keydown.enter="addNewTask"
                       v-model="taskInput"
-                      color="teal"
+                      :color="taskGroupColor"
+                      :focused="store.selectedTaskGroup.name != 'New taskgroup'"
                       variant="outlined"></v-text-field>
       </v-sheet>
     </v-card-item>

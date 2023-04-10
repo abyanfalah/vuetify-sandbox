@@ -17,6 +17,12 @@ export const useTodoappStore = defineStore("todoapp", () => {
     return selectedTaskGroup.value.taskList;
   });
 
+  const currentTaskGroupColor = computed(() => {
+    if (!selectedTaskGroup.value) return null;
+
+    return selectedTaskGroup.value.color;
+  });
+
   const selectedTaskGroupIndex = computed(() => {
     if (!selectedTaskGroup.value) return null;
 
@@ -34,9 +40,11 @@ export const useTodoappStore = defineStore("todoapp", () => {
     };
 
     taskGroupList.value.push(newTaskGroup);
-    selectedTaskGroup.value = newTaskGroup;
 
-    setTimeout(() => {});
+    selectedTaskGroup.value = null;
+    setTimeout(() => {
+      selectedTaskGroup.value = newTaskGroup;
+    }, 100);
   }
 
   function toggleSelectedTaskGroup(taskGroup) {
@@ -188,6 +196,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
     deleteTask,
     clearCompletedTask,
 
+    currentTaskGroupColor,
     states,
     restoreStates,
   };
