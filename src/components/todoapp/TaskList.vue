@@ -8,7 +8,7 @@ const store = useTodoappStore();
 const taskInput = ref("");
 const hideCompletedTask = ref(false);
 
-
+const clearCompletedTaskConfirmation = ref(false);
 
 function addNewTask() {
   if (!taskInput.value) return;
@@ -39,8 +39,11 @@ onMounted(() => {
   <v-card elevation="3"
           class="rounded">
     <v-card-title class="pa-0">
+
       <v-toolbar class="py-3"
                  color="white">
+
+
 
         <!-- taskgroup menu -->
         <template v-slot:prepend>
@@ -65,7 +68,7 @@ onMounted(() => {
               <v-list-item prepend-icon="mdi-broom"
                            title="Clear completed tasks"
                            class="rounded"
-                           @click=""></v-list-item>
+                           @click="clearCompletedTaskConfirmation = true"></v-list-item>
 
 
               <v-list-item prepend-icon="mdi-delete"
@@ -97,10 +100,32 @@ onMounted(() => {
 
     <!-- task items -->
     <v-card-item class="px-5">
+
       <v-expand-transition>
         <TaskgroupColorPickerVue class="mb-3"
                                  v-if="store.showColorPicker" />
+        <v-sheet v-if="clearCompletedTaskConfirmation"
+                 class="d-flex justify-center align-center flex-column">
+          <span>
+            Are you sure?
+          </span>
+
+          <div class="d-flex justify-center mt-3">
+            <v-btn color="red"
+                   size="small"
+                   @click="{ store.clearCompletedTask(); clearCompletedTaskConfirmation = false }"
+                   variant="outlined">Yes</v-btn>
+            <v-btn color="primary"
+                   variant="tonal"
+                   class="ms-2"
+                   @click="clearCompletedTaskConfirmation = false"
+                   size="small">No</v-btn>
+          </div>
+        </v-sheet>
+
       </v-expand-transition>
+
+
 
       <v-sheet class="my-5">
         <v-sheet v-for="(task, index) in store.selectedTaskGroup.taskList"

@@ -11,6 +11,18 @@ export const useTodoappStore = defineStore("todoapp", () => {
 
   const showDeleteDialog = ref(false);
 
+  const currentTaskList = computed(() => {
+    if (!selectedTaskGroup.value) return null;
+
+    return selectedTaskGroup.value.taskList;
+  });
+
+  const selectedTaskGroupIndex = computed(() => {
+    if (!selectedTaskGroup.value) return null;
+
+    return todoappService.getTaskGroupIndex(selectedTaskGroup.value);
+  });
+
   // ======== TaskGroup functions
   function newTaskGroup() {
     const newTaskGroup = {
@@ -80,6 +92,14 @@ export const useTodoappStore = defineStore("todoapp", () => {
     selectedTask.value = null;
   }
 
+  function clearCompletedTask() {
+    let taskList = currentTaskList.value;
+    let clearedTaskList = taskList.filter((task) => task.isDone == false);
+
+    const taskGroupIndex = selectedTaskGroupIndex.value;
+    taskGroupList.value[taskGroupIndex].taskList = clearedTaskList;
+  }
+
   // ============= tasklist.vue
   const showColorPicker = ref(false);
 
@@ -88,9 +108,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
   }
 
   function addTask(newTask) {
-    const taskGroupIndex = todoappService.getTaskGroupIndex(
-      selectedTaskGroup.value
-    );
+    const taskGroupIndex = selectedTaskGroupIndex.value;
     taskGroupList.value[taskGroupIndex].taskList.push(newTask);
   }
 
@@ -100,7 +118,6 @@ export const useTodoappStore = defineStore("todoapp", () => {
   watch(selectedTaskGroup, (newVal) => {
     if (newVal === null) {
       selectedTask.value = null;
-      console.log("selectedTask nullified");
     }
   });
 
@@ -118,22 +135,15 @@ export const useTodoappStore = defineStore("todoapp", () => {
     (newState) => {
       newState = JSON.stringify(newState);
       localStorage.setItem("todoapp", newState);
-
-      console.log(
-        "localStorage =>",
-        JSON.parse(localStorage.getItem("todoapp"))
-      );
     },
     { deep: true }
   );
 
   function restoreStates() {
     const storedState = JSON.parse(localStorage.getItem("todoapp"));
-    console.log("storedState =>", storedState);
     if (storedState == null) return console.log("no storedState for todoapp");
 
     taskGroupList.value = storedState.taskGroupList ?? [];
-    // console.log("taskGroupList =>", taskGroupList.value);
 
     if (taskGroupList.value.length < 1) return;
 
@@ -143,7 +153,6 @@ export const useTodoappStore = defineStore("todoapp", () => {
       storedState.selectedTaskGroup
     );
     selectedTaskGroup.value = taskGroupList.value[storedTaskGroupIndex];
-    // console.log("selectedTaskGroup =>", selectedTaskGroup.value);
 
     const selectedTaskListLength = selectedTaskGroup.value.taskList.length;
     if (selectedTaskListLength < 1) {
@@ -160,7 +169,6 @@ export const useTodoappStore = defineStore("todoapp", () => {
       (task) => task.id == storedState.selectedTask.id
     );
     selectedTask.value = selectedTaskGroup.value.taskList[selectedTaskIndex];
-    console.log("selectedTask =>", selectedTask.value);
   }
 
   // +=+=+=+=+=+=+=+=+=+=+=+= return the options (?)
@@ -182,6 +190,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
     toggleSelectedTask,
     toggleTaskDone,
     deleteTask,
+    clearCompletedTask,
 
     states,
     restoreStates,
