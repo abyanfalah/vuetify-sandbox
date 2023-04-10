@@ -7,6 +7,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
   // todoapp.vue
   const taskGroupList = ref([]);
   const selectedTaskGroup = ref(null);
+  const isViewingTaskGroup = ref(false);
   const selectedTask = ref(null);
 
   const showDeleteDialog = ref(false);
@@ -50,14 +51,18 @@ export const useTodoappStore = defineStore("todoapp", () => {
   function toggleSelectedTaskGroup(taskGroup) {
     if (selectedTaskGroup.value === null) {
       selectedTaskGroup.value = taskGroup;
+      isViewingTaskGroup.value = true;
       return;
     }
 
     if (taskGroup == selectedTaskGroup.value) {
       selectedTaskGroup.value = null;
+      setTimeout(() => (isViewingTaskGroup.value = false), 200);
+
       return;
     }
 
+    isViewingTaskGroup.value = true;
     selectedTaskGroup.value = null;
     setTimeout(() => (selectedTaskGroup.value = taskGroup), 100);
   }
@@ -181,6 +186,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
   return {
     taskGroupList,
     selectedTaskGroup,
+    isViewingTaskGroup,
     selectedTask,
     showDeleteDialog,
 

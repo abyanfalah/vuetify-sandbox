@@ -28,8 +28,7 @@ function getSidebarNavStyle(taskGroup) {
 </script>
 
 <template>
-  <v-navigation-drawer persistent
-                       color=""
+  <v-navigation-drawer v-if="store.isViewingTaskGroup"
                        elevation="10">
     <v-list>
       <v-list-item class="ms-1"

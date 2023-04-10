@@ -4,6 +4,7 @@ import { onMounted, ref, watch } from 'vue';
 import getBrightorDarkTextColor from '@/services/getBrightorDarkTextColor';
 
 import TodoappSidebar from '@/components/todoapp/TodoappSidebar.vue';
+import TaskGroupSelect from '@/components/todoapp/TaskGroupSelect.vue';
 import TaskList from '@/components/todoapp/TaskList.vue';
 import TaskDetail from '@/components/todoapp/TaskDetail.vue';
 import ModalDeleteTaskGroup from '@/components/todoapp/ModalDeleteTaskGroup.vue';
@@ -28,12 +29,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-sheet :class="`h-100 pa-10`"
+  <v-sheet :class="`h-100`"
            :color="backgroundColor"
            :style="{ color: getBrightorDarkTextColor(backgroundColor) }">
     <TodoappSidebar />
 
-    <v-row>
+    <v-row class="pa-10"
+           v-if="store.isViewingTaskGroup">
       <!-- selected taskgroup view -->
       <v-col cols="6">
         <v-scroll-x-transition>
@@ -46,10 +48,10 @@ onMounted(() => {
         <v-slide-x-transition>
           <TaskDetail v-if="store.selectedTask" />
         </v-slide-x-transition>
-
-        {{ store.selectedTaskGroup }}
       </v-col>
     </v-row>
+
+    <TaskGroupSelect v-else />
   </v-sheet>
 
   <ModalDeleteTaskGroup v-model="store.showDeleteDialog" />
