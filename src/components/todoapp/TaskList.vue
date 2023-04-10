@@ -42,11 +42,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-card elevation="3"
+  <v-card elevation="10"
           class="rounded">
     <v-card-title class="pa-0">
-      <v-toolbar class="py-3"
-                 color="white">
+      <v-toolbar class="py-3">
         <!-- taskgroup menu -->
         <template v-slot:prepend>
           <v-btn icon="mdi-dots-vertical"

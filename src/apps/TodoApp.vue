@@ -1,22 +1,17 @@
 <script setup>
 import { computed } from '@vue/reactivity';
-import { getCurrentInstance, onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import getBrightorDarkTextColor from '@/services/getBrightorDarkTextColor';
 
 import TodoappSidebar from '@/components/todoapp/TodoappSidebar.vue';
 import TaskList from '@/components/todoapp/TaskList.vue';
 import TaskDetail from '@/components/todoapp/TaskDetail.vue';
 import ModalDeleteTaskGroup from '@/components/todoapp/ModalDeleteTaskGroup.vue';
 
+
 import { useTodoappStore } from '@/stores/TodoappStore';
 
 const store = useTodoappStore();
-
-
-// TODO: delete this function later
-function emptyLocalstorage() {
-  localStorage.removeItem('todoapp');
-  window.location.reload();
-}
 
 let previousBackgroundColor = null;
 const backgroundColor = computed(() => {
@@ -28,14 +23,14 @@ const backgroundColor = computed(() => {
 
 onMounted(() => {
   store.restoreStates();
-
   previousBackgroundColor = store.selectedTaskGroup ? store.selectedTaskGroup.color : 'grey';
 });
 </script>
 
 <template>
   <v-sheet :class="`h-100 pa-10`"
-           :color="backgroundColor">
+           :color="backgroundColor"
+           :style="{ color: getBrightorDarkTextColor(backgroundColor) }">
     <TodoappSidebar />
 
     <v-row>

@@ -10,7 +10,7 @@ const deleteTaskConfirmation = ref(false);
 
 <template>
   <v-card class=""
-          elevation="3">
+          elevation="10">
     <v-container class="pa-5 pb-0">
       <v-card-title class="pa-0">
         <v-text-field variant="underlined"

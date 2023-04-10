@@ -33,7 +33,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
   function newTaskGroup() {
     const newTaskGroup = {
       id: crypto.randomUUID(),
-      color: "grey",
+      color: "#747474",
       name: `New taskgroup`,
       taskList: [],
       priority: "Normal",

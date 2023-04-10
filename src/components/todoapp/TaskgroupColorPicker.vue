@@ -11,7 +11,16 @@ const store = useTodoappStore();
 
 <template>
   <v-card elevation="5"
-          class="mt-3 rounded">
+          max-width="400px"
+          class="mt-3 rounded mx-auto">
+    <v-toolbar class="d-flex justify-space-between"
+               height="30">
+
+      <v-btn icon="mdi-close"
+             size="small"
+             class="ms-auto"
+             @click="emits('closeColorPicker')"></v-btn>
+    </v-toolbar>
     <v-color-picker hide-canvas
                     hide-inputs
                     hide-sliders
@@ -21,9 +30,6 @@ const store = useTodoappStore();
                     v-model="store.selectedTaskGroup.color"
                     show-swatches>asdfa</v-color-picker>
 
-    <v-toolbar class="d-flex justify-space-between">
-      <v-btn icon="mdi-chevron-up"
-             @click="emits('closeColorPicker')"></v-btn>
-    </v-toolbar>
+
   </v-card>
 </template>
