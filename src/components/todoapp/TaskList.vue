@@ -7,8 +7,10 @@ import { useTodoappStore } from '@/stores/TodoappStore';
 const store = useTodoappStore();
 const taskInput = ref("");
 const hideCompletedTask = ref(false);
+const showColorPicker = ref(false);
 
 const clearCompletedTaskConfirmation = ref(false);
+const selectedColor = ref('');
 
 function addNewTask() {
   if (!taskInput.value) return;
@@ -40,18 +42,19 @@ onMounted(() => {
           class="rounded">
     <v-card-title class="pa-0">
 
-      <v-toolbar class="py-3"
-                 color="white">
+      <v-toolbar class="py-3">
 
 
 
         <!-- taskgroup menu -->
         <template v-slot:prepend>
           <v-btn icon="mdi-dots-vertical"
-                 id="menu-activator"></v-btn>
+                 id="menu-activator"
+                 :disabled="showColorPicker || clearCompletedTaskConfirmation"></v-btn>
 
           <v-menu activator="#menu-activator"
-                  transition="scroll-x-transition">
+                  transition="scroll-x-transition"
+                  :disabled="false">
             <v-list class="px-3">
               <v-list-item prepend-icon="mdi-palette"
                            title="Change color"
@@ -103,7 +106,8 @@ onMounted(() => {
 
       <v-expand-transition>
         <TaskgroupColorPickerVue class="mb-3"
-                                 v-if="store.showColorPicker" />
+                                 @close-color-picker="showColorPicker = false"
+                                 v-if="showColorPicker" />
         <v-sheet v-if="clearCompletedTaskConfirmation"
                  class="d-flex justify-center align-center flex-column">
           <span>

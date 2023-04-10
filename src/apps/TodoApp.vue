@@ -18,13 +18,24 @@ function emptyLocalstorage() {
   window.location.reload();
 }
 
+let previousBackgroundColor = null;
+const backgroundColor = computed(() => {
+  if (!store.selectedTaskGroup) return previousBackgroundColor;
+
+  previousBackgroundColor = store.selectedTaskGroup.color;
+  return previousBackgroundColor;
+});
+
 onMounted(() => {
   store.restoreStates();
+
+  previousBackgroundColor = store.selectedTaskGroup ? store.selectedTaskGroup.color : 'grey';
 });
 </script>
 
 <template>
-  <div :class="`h-100 bg-teal-lighten-4 pa-10`">
+  <v-sheet :class="`h-100 pa-10`"
+           :color="backgroundColor">
     <TodoappSidebar />
 
     <v-row>
@@ -40,9 +51,11 @@ onMounted(() => {
         <v-slide-x-transition>
           <TaskDetail v-if="store.selectedTask" />
         </v-slide-x-transition>
+
+        {{ store.selectedTaskGroup }}
       </v-col>
     </v-row>
-  </div>
+  </v-sheet>
 
   <ModalDeleteTaskGroup v-model="store.showDeleteDialog" />
 </template>

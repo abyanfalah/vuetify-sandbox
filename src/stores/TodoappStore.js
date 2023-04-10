@@ -27,7 +27,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
   function newTaskGroup() {
     const newTaskGroup = {
       id: crypto.randomUUID(),
-      color: "white",
+      color: "grey",
       name: `New taskgroup`,
       taskList: [],
       priority: "Normal",
@@ -101,8 +101,6 @@ export const useTodoappStore = defineStore("todoapp", () => {
   }
 
   // ============= tasklist.vue
-  const showColorPicker = ref(false);
-
   function changeColor() {
     alert("coming soon");
   }
@@ -177,8 +175,6 @@ export const useTodoappStore = defineStore("todoapp", () => {
     selectedTaskGroup,
     selectedTask,
     showDeleteDialog,
-
-    showColorPicker,
 
     // taskgroup functions
     newTaskGroup,
