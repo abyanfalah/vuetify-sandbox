@@ -6,8 +6,7 @@ const store = useTodoappStore();
 
 <template>
   <v-navigation-drawer persistent
-                       elevation="3"
-                       color="teal">
+                       elevation="3">
     <v-list>
       <v-list-item class="ms-1"
                    prepend-icon="mdi-list-box"
@@ -19,7 +18,7 @@ const store = useTodoappStore();
 
     <v-divider></v-divider>
 
-    <v-list class="px-3 bg-teal">
+    <v-list class="px-3">
       <v-list-subheader color="white">Task groups</v-list-subheader>
       <v-list-item v-for="(taskGroup, index) in store.taskGroupList"
                    @click="store.toggleSelectedTaskGroup(taskGroup)"
@@ -35,8 +34,9 @@ const store = useTodoappStore();
     </v-list>
 
     <v-btn prepend-icon="mdi-plus"
-           color="white"
+           color="black"
            class="ms-5 my-3"
+           variant="outlined"
            @click="store.newTaskGroup">new task group
     </v-btn>
 
