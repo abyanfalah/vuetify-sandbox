@@ -34,24 +34,31 @@ onMounted(() => {
            :style="{ color: getBrightorDarkTextColor(backgroundColor) }">
     <TodoappSidebar />
 
-    <v-row class="pa-10"
-           v-if="store.isViewingTaskGroup">
-      <!-- selected taskgroup view -->
-      <v-col cols="6">
-        <v-scroll-x-transition>
-          <TaskList v-if="store.selectedTaskGroup" />
-        </v-scroll-x-transition>
-      </v-col>
+    <!-- TODO: change to v-if isviewing a taskgroup -->
+    <v-expand-transition>
 
-      <!-- selected task detail -->
-      <v-col>
-        <v-slide-x-transition>
-          <TaskDetail v-if="store.selectedTask" />
-        </v-slide-x-transition>
-      </v-col>
-    </v-row>
+      <v-row class="pa-10"
+             v-if="store.isViewingTaskGroup">
+        <!-- selected taskgroup view -->
+        <v-col cols="6">
+          <v-scroll-x-transition>
+            <TaskList v-if="store.selectedTaskGroup" />
+          </v-scroll-x-transition>
+        </v-col>
 
-    <TaskGroupSelect v-else />
+        <!-- selected task detail -->
+        <v-col>
+          <v-slide-x-transition>
+            <TaskDetail v-if="store.selectedTask" />
+          </v-slide-x-transition>
+        </v-col>
+      </v-row>
+    </v-expand-transition>
+
+    <!-- TODO: change to v-else -->
+    <v-expand-transition>
+      <TaskGroupSelect v-if="store.selectedTaskGroup == null && store.isViewingTaskGroup == false" />
+    </v-expand-transition>
   </v-sheet>
 
   <ModalDeleteTaskGroup v-model="store.showDeleteDialog" />

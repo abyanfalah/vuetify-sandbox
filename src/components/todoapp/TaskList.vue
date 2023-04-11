@@ -99,7 +99,7 @@ onMounted(() => {
         <!-- btn close -->
         <template v-slot:append>
           <v-btn icon="mdi-close-circle"
-                 @click="store.selectedTaskGroup = null"></v-btn>
+                 @click="store.toggleSelectedTaskGroup(store.selectedTaskGroup)"></v-btn>
         </template>
       </v-toolbar>
     </v-card-title>
