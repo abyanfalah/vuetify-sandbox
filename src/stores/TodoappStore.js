@@ -43,6 +43,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
     taskGroupList.value.push(newTaskGroup);
 
     selectedTaskGroup.value = null;
+    isViewingTaskGroup.value = true;
     setTimeout(() => {
       selectedTaskGroup.value = newTaskGroup;
     }, 100);

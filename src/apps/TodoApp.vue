@@ -57,7 +57,7 @@ onMounted(() => {
 
     <!-- TODO: change to v-else -->
     <v-expand-transition>
-      <TaskGroupSelect v-if="store.selectedTaskGroup == null && store.isViewingTaskGroup == false" />
+      <TaskGroupSelect v-if="store.isViewingTaskGroup == false" />
     </v-expand-transition>
   </v-sheet>
 
