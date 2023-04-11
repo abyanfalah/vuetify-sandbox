@@ -62,7 +62,7 @@ onMounted(() => {
                            @click="showColorPicker = !showColorPicker"></v-list-item>
 
               <v-list-item :prepend-icon="`mdi-eye${!hideCompletedTask ? '-off' : ''}`"
-                           :title="`${hideCompletedTask ? 'Show' : 'Hide'} completed task`"
+                           :title="`${hideCompletedTask ? 'Show' : '(coming soon) Hide'} completed task`"
                            class="rounded"
                            @click="hideCompletedTask = !hideCompletedTask"></v-list-item>
 
