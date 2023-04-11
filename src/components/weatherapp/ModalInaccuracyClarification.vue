@@ -59,7 +59,7 @@ watch(() => props.color, () => {
 
         <!-- page 3 -->
         <v-card-text v-if="page == 3">
-          <p>I use <a href="https://open-meteo.com/en/docs/geocoding-api">geocding API from open-meteo itself</a> to get
+          <p>I use <a href="https://open-meteo.com/en/docs/geocoding-api">geocoding API from open-meteo itself</a> to get
             the coordinates of the location you want to know the weather of. Then hit the weather API with the coordinates
             number provided.</p>
 
@@ -78,7 +78,7 @@ watch(() => props.color, () => {
           <v-card-actions class="mt-10 d-flex justify-center">
             <v-btn variant="outlined"
                    :class="`bg-${props.color}`"
-                   @click="closeThisThing">That's cool! you to bruh...</v-btn>
+                   @click="closeThisThing">That's cool! you too bruh...</v-btn>
           </v-card-actions>
         </v-card-text>
 
