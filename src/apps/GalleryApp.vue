@@ -36,6 +36,7 @@ onMounted(() => {
 function restoreStates() {
   2;
   const storedState = JSON.parse(localStorage.getItem("galleryApp"));
+  if (storedState == null) return console.log("no storedState for galleryApp");
   numberOfImagesToDisplay.value = storedState.numberOfImagesToDisplay ?? numberOfImagesToDisplay.value;
   columnNumber.value = storedState.columnNumber ?? columnNumber.value;
   colorize.value = storedState.colorize ?? colorize.value;

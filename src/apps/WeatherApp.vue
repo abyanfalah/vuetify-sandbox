@@ -115,6 +115,8 @@ onMounted(() => {
 function restoreStates() {
   // restore states
   const storedState = JSON.parse(localStorage.getItem("weatherApp"));
+  if (storedState == null) return console.log("no storedState for weatherApp");
+
   location.value = storedState.location ?? location.value;
   locationQuery.value = storedState.locationQuery ?? locationQuery.value;
   weatherData.value = storedState.weatherData ?? weatherData.value;
