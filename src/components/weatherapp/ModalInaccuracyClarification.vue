@@ -74,7 +74,7 @@ watch(() => props.color, () => {
 
         <!-- page 4 -->
         <v-card-text v-if="page == 4">
-          <p>I hope you life goes well bruh...</p>
+          <p>I hope your life goes well bruh...</p>
           <v-card-actions class="mt-10 d-flex justify-center">
             <v-btn variant="outlined"
                    :class="`bg-${props.color}`"
