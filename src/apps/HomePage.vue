@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+function thatsIt() {
+  alert(`That's it. Ironically, this "home" page page is not ready yet. But that doesn't make visitors became "homeless" hehehe just kidding :)`);
+}
+</script>
 
 <template>
   <v-container>
