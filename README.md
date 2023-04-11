@@ -2,6 +2,17 @@
 
 This project is just a place where i can learn and experiment with Vuetify. It contains several mini projects.
 
+In case you want to see the result immediately, just head to this [netlify app](https://abyanf-sandbox-vuetify.netlify.app/).
+
+## Future direction
+
+- Multi counter app (like tally counter app)
+- Personal music playlist app
+- Journaling app
+- Money tracker app
+- Tetris?
+- My personal page.
+
 ## Project setup
 
 ```
