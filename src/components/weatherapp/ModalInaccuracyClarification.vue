@@ -38,7 +38,7 @@ watch(() => props.color, () => {
 
           <v-card-actions class="mt-10 d-flex justify-center">
             <v-btn variant="outlined"
-                   :color="props.color"
+                   :class="`bg-${props.color}`"
                    @click="page = 2">I see....</v-btn>
           </v-card-actions>
         </v-card-text>
@@ -52,7 +52,7 @@ watch(() => props.color, () => {
           <p class="mt-3">But the problem is, it only accepts coordinate numbers as the location params..</p>
           <v-card-actions class="mt-10 d-flex justify-center">
             <v-btn variant="outlined"
-                   :color="props.color"
+                   :class="`bg-${props.color}`"
                    @click="page = 3">So what do you do?</v-btn>
           </v-card-actions>
         </v-card-text>
@@ -67,7 +67,7 @@ watch(() => props.color, () => {
             good time coding it out. So it's fine.</p>
           <v-card-actions class="mt-10 d-flex justify-center">
             <v-btn variant="outlined"
-                   :color="props.color"
+                   :class="`bg-${props.color}`"
                    @click="page = 4">Aight bruh. i symphatize with you...</v-btn>
           </v-card-actions>
         </v-card-text>
@@ -77,7 +77,7 @@ watch(() => props.color, () => {
           <p>I hope you life goes well bruh...</p>
           <v-card-actions class="mt-10 d-flex justify-center">
             <v-btn variant="outlined"
-                   :color="props.color"
+                   :class="`bg-${props.color}`"
                    @click="closeThisThing">That's cool! you to bruh...</v-btn>
           </v-card-actions>
         </v-card-text>
