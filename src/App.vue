@@ -5,7 +5,7 @@ import SideBar from './components/SideBar.vue';
 
 import HomePage from './apps/HomePage.vue';
 import GalleryApp from './apps/GalleryApp.vue';
-import TestPage from './components/TestPage.vue';
+import TestPage from './TestPage.vue';
 import TodoApp from './apps/TodoApp.vue';
 import CounterApp from './apps/CounterApp.vue';
 import WeatherApp from './apps/WeatherApp.vue';

@@ -1,74 +1,60 @@
 <script setup>
-import { computed, onBeforeMount, ref, watch } from 'vue';
-import todoAppModules from '@/services/todoAppModules';
+import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
+import todoAppModules from '@/services/todoappService';
 import TaskgroupColorPickerVue from './TaskgroupColorPicker.vue';
+import { useTodoappStore } from '@/stores/TodoappStore';
 
-const emit = defineEmits(['seeTaskDetail', 'markTaskDone', 'deleteTaskGroup', 'closeTaskGroup', 'clearCompletedTasks', 'showColorPicker']);
-const props = defineProps(['taskGroup', 'selectedTask']);
-const getColorByPriority = todoAppModules.getColorByPriority;
-
-const taskGroup = ref({});
-const selectedTask = ref(null);
+const store = useTodoappStore();
+const taskInput = ref("");
+const hideCompletedTask = ref(false);
 const showColorPicker = ref(false);
 
-const hideCompletedTask = ref(false);
+const clearCompletedTaskConfirmation = ref(false);
 
-function changeColor() {
-  alert('coming soon');
-}
+const taskGroupColor = computed(() => {
+  return store.selectedTaskGroup.color;
+});
 
-const taskInput = ref('');
-function addTask() {
+
+function addNewTask() {
   if (!taskInput.value) return;
-
   const newTask = {
+    id: crypto.randomUUID(),
     task: taskInput.value,
     isDone: false,
     due: null,
-    priority: 'Normal',
+    priority: "Normal",
     notes: null,
     addedAt: Date.now(),
     doneAt: null,
   };
-  taskGroup.value.taskList.push(newTask);
+
+  store.addTask(newTask);
   taskInput.value = '';
-};
-
-function selectTask(task) {
-  emit('seeTaskDetail', task);
-  selectedTask.value = task;
-}
-
-function toggleSelectTask(task) {
-  if (selectedTask.value == task) {
-    selectedTask.value = null;
-    emit('seeTaskDetail', null);
-  } else {
-    selectTask(task);
-  }
-
 }
 
 
+const taskGroup = ref({});
+onMounted(() => {
+  taskGroup.value = store.selectedTaskGroup;
+})
 
-onBeforeMount(() => {
-  taskGroup.value = props.taskGroup;
-  selectedTask.value = props.selectedTask ?? null;
-});
 </script>
 
 <template>
-  <v-card elevation="3"
+  <v-card elevation="10"
           class="rounded">
     <v-card-title class="pa-0">
-      <v-toolbar class="py-3"
-                 color="white">
+      <v-toolbar class="py-3">
+        <!-- taskgroup menu -->
         <template v-slot:prepend>
           <v-btn icon="mdi-dots-vertical"
-                 id="menu-activator"></v-btn>
+                 id="menu-activator"
+                 :disabled="showColorPicker || clearCompletedTaskConfirmation"></v-btn>
 
           <v-menu activator="#menu-activator"
-                  transition="scroll-x-transition">
+                  transition="scroll-x-transition"
+                  :disabled="false">
             <v-list class="px-3">
               <v-list-item prepend-icon="mdi-palette"
                            title="Change color"
@@ -85,68 +71,93 @@ onBeforeMount(() => {
               <v-list-item prepend-icon="mdi-broom"
                            title="Clear completed tasks"
                            class="rounded"
-                           @click="emit('clearCompletedTasks')"></v-list-item>
+                           @click="clearCompletedTaskConfirmation = true"></v-list-item>
 
 
               <v-list-item prepend-icon="mdi-delete"
                            title="Delete this task group"
                            class="bg-red rounded"
                            variant="outlined"
-                           @click="emit('deleteTaskGroup', taskGroup)"></v-list-item>
+                           @click="store.showDeleteDialog = true"></v-list-item>
             </v-list>
           </v-menu>
         </template>
 
-
+        <!-- taskgroup name -->
         <v-text-field class="mx-3"
-                      v-model="taskGroup.name"
                       label="Group name"
                       density="comfortable"
                       variant="underlined"
-                      color="teal"
-                      :autofocus="taskGroup.name.toLowerCase().indexOf('task group ') > -1 ? true : false"
+                      v-model="store.selectedTaskGroup.name"
+                      :color="taskGroupColor"
+                      @keydown.enter="$event.target.blur()"
+                      :autofocus="store.selectedTaskGroup.name == 'New taskgroup'"
                       hide-details>
+
         </v-text-field>
 
+        <!-- btn close -->
         <template v-slot:append>
           <v-btn icon="mdi-close-circle"
-                 @click="emit('closeTaskGroup', taskGroup)"></v-btn>
+                 @click="store.selectedTaskGroup = null"></v-btn>
         </template>
-
-
-
       </v-toolbar>
     </v-card-title>
 
-    <!-- task items -->
     <v-card-item class="px-5">
+
+      <!-- color picker & clear confirmation -->
       <v-expand-transition>
         <TaskgroupColorPickerVue class="mb-3"
+                                 @close-color-picker="showColorPicker = false"
                                  v-if="showColorPicker" />
+
+        <v-sheet v-if="clearCompletedTaskConfirmation"
+                 class="d-flex justify-center align-center flex-column">
+          <span>
+            Are you sure?
+          </span>
+
+          <div class="d-flex justify-center mt-3">
+            <v-btn color="red"
+                   size="small"
+                   @click="{ store.clearCompletedTask(); clearCompletedTaskConfirmation = false }"
+                   variant="outlined">Yes</v-btn>
+            <v-btn color="primary"
+                   variant="tonal"
+                   class="ms-2"
+                   @click="clearCompletedTaskConfirmation = false"
+                   size="small">No</v-btn>
+          </div>
+        </v-sheet>
+
       </v-expand-transition>
 
+      <!-- task items -->
       <v-sheet class="my-5">
-        <v-sheet v-for="(task, index) in taskGroup.taskList"
-                 :class="{ 'text-disabled': task.isDone, 'd-none': task.isDone && hideCompletedTask }"
+        <v-sheet v-for="(task, index) in store.selectedTaskGroup.taskList"
+                 :class="{ 'text-disabled': task.isDone }"
                  class="mb-3 py-1 px-2 border d-flex justify-space-between align-center rounded">
 
           <!-- checkbox -->
           <v-checkbox-btn v-model="task.isDone"
-                          @click="emit('markTaskDone', task)"></v-checkbox-btn>
+                          :color="taskGroupColor"
+                          @click="store.toggleTaskDone(task)"></v-checkbox-btn>
 
           <!-- task text -->
           <input type="text"
                  @keydown.enter="$event.target.blur()"
-                 v-model="taskGroup.taskList[index].task"
+                 v-model="task.task"
                  class="w-100"
                  :class="task.isDone ? 'text-disabled text-decoration-line-through' : ''">
 
           <!-- see detail btn -->
-          <v-btn :icon="`mdi-chevron-${selectedTask == task ? 'left' : 'right'}`"
+          <v-btn :icon="`mdi-chevron-${store.selectedTask == task ? 'left' : 'right'}`"
                  flat
-                 :class="selectedTask == task ? 'bg-black' : 'bg-transparent'"
-                 @click="toggleSelectTask(task)"
+                 :class="store.selectedTask == task ? 'bg-grey' : 'bg-transparent'"
+                 @click="store.toggleSelectedTask(task)"
                  density="comfortable"></v-btn>
+
         </v-sheet>
 
         <!-- task input -->
@@ -155,13 +166,13 @@ onBeforeMount(() => {
                       class="rounded mt-5"
                       placeholder="Add new task"
                       clearable
-                      :autofocus="taskGroup.name.toLowerCase().indexOf('task group ') < 0 ? true : false"
                       label="+ New task"
                       append-inner-icon="mdi-plus"
-                      @click:append-inner="addTask"
-                      @keydown.enter="addTask"
+                      @click:append-inner="addNewTask"
+                      @keydown.enter="addNewTask"
                       v-model="taskInput"
-                      color="teal"
+                      :color="taskGroupColor"
+                      :focused="store.selectedTaskGroup.name != 'New taskgroup'"
                       variant="outlined"></v-text-field>
       </v-sheet>
     </v-card-item>

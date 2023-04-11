@@ -1,41 +1,36 @@
 <script setup>
-import { onBeforeMount, onMounted, ref, watch } from 'vue';
+import { useTodoappStore } from '@/stores/TodoappStore';
+import { onMounted, ref } from 'vue';
 
-
-const emit = defineEmits(['markTaskDone', 'deleteTask']);
-const props = defineProps(['selectedTask']);
-const task = ref({});
+const store = useTodoappStore();
 
 const deleteTaskConfirmation = ref(false);
 
-onMounted(() => {
-  task.value = props.selectedTask;
-});
 </script>
 
 <template>
   <v-card class=""
-          elevation="3"
-          v-if="task">
+          elevation="10">
     <v-container class="pa-5 pb-0">
       <v-card-title class="pa-0">
         <v-text-field variant="underlined"
-                      color="teal"
-                      v-model="task.task"
+                      :color="store.currentTaskGroupColor"
+                      v-model="store.selectedTask.task"
                       label="Task name"></v-text-field>
       </v-card-title>
 
       <!-- task priority -->
-      <v-combobox label="Priority"
-                  variant="underlined"
-                  v-model="task.priority"
-                  density="comfortable"
-                  :items="['Urgent', 'High', 'Normal', 'Low']"></v-combobox>
+      <v-select label="Priority"
+                :color="store.currentTaskGroupColor"
+                variant="underlined"
+                v-model="store.selectedTask.priority"
+                density="comfortable"
+                :items="['Urgent', 'High', 'Normal', 'Low']"></v-select>
 
       <!-- task additional nots -->
       <v-textarea label="Additional notes"
-                  color="teal"
-                  v-model="task.notes"
+                  :color="store.currentTaskGroupColor"
+                  v-model="store.selectedTask.notes"
                   variant="outlined"></v-textarea>
 
 
@@ -46,16 +41,16 @@ onMounted(() => {
 
     <!-- buttons -->
     <v-card-actions class="py-3 ">
-      <v-btn v-if="!task.isDone"
+      <v-btn v-if="!store.selectedTask.isDone"
              prepend-icon="mdi-check"
-             :disabled="deleteTaskConfirmation"
-             @click="emit('markTaskDone', task)"
-             color="success">
+             @click="store.toggleTaskDone(store.selectedTask)"
+             :disabled="store.selectedTask.isDone || deleteTaskConfirmation"
+             :color="store.currentTaskGroupColor">
         mark as done
       </v-btn>
 
-      <v-sheet v-if="task.isDone"
-               class="text-disabled">
+      <v-sheet v-if="store.selectedTask.isDone"
+               class="text-disabled rounded px-3 py-1">
         <v-icon icon="mdi-check"></v-icon>
         Task is done
       </v-sheet>
@@ -63,6 +58,7 @@ onMounted(() => {
       <v-btn prepend-icon="mdi-delete"
              class="ms-auto"
              @click="deleteTaskConfirmation = true"
+             :disabled="deleteTaskConfirmation"
              color="red">
         <span v-if="deleteTaskConfirmation">
           Are you sure?
@@ -79,8 +75,8 @@ onMounted(() => {
 
         <v-card-actions class="d-flex  justify-end">
           <v-btn variant="outlined"
-                 color="red"
-                 @click="emit('deleteTask', task)">
+                 @click="store.deleteTask(store.selectedTask)"
+                 color="red">
             Yes
           </v-btn>
 

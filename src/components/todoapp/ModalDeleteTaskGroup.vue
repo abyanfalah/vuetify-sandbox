@@ -1,7 +1,7 @@
 <script setup>
-const emit = defineEmits(['confirmDelete', 'cancelDelete']);
-const props = defineProps(['taskGroup']);
+import { useTodoappStore } from '@/stores/TodoappStore';
 
+const store = useTodoappStore();
 </script>
 
 <template>
@@ -17,8 +17,8 @@ const props = defineProps(['taskGroup']);
       <v-card-actions class="d-flex justify-space-around">
         <v-btn variant="outlined"
                color="red"
-               @click="emit('confirmDelete', props.taskGroup)">Yes</v-btn>
-        <v-btn @click="emit('cancelDelete')">No</v-btn>
+               @click="store.deleteTaskGroup(store.selectedTaskGroup)">Yes</v-btn>
+        <v-btn @click="store.showDeleteDialog = false">No</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

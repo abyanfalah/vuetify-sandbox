@@ -1,214 +1,58 @@
 <script setup>
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
+import getBrightorDarkTextColor from '@/services/getBrightorDarkTextColor';
 
+import TodoappSidebar from '@/components/todoapp/TodoappSidebar.vue';
+import TaskGroupSelect from '@/components/todoapp/TaskGroupSelect.vue';
 import TaskList from '@/components/todoapp/TaskList.vue';
 import TaskDetail from '@/components/todoapp/TaskDetail.vue';
 import ModalDeleteTaskGroup from '@/components/todoapp/ModalDeleteTaskGroup.vue';
 
 
-const taskGroupList = ref([]);
-const isViewingTaskGroup = ref(false);
-const selectedTaskGroup = ref();
+import { useTodoappStore } from '@/stores/TodoappStore';
 
-const isViewingTaskDetail = ref(false);
-const selectedTask = ref();
+const store = useTodoappStore();
 
-const showDeleteDialog = ref(false);
+let previousBackgroundColor = null;
+const backgroundColor = computed(() => {
+  if (!store.selectedTaskGroup) return previousBackgroundColor;
 
-
-// TaskGroup functions
-function newTaskGroup() {
-
-  const newTaskGroup = {
-    id: crypto.randomUUID(),
-    color: 'white',
-    name: `New taskgroup`,
-    taskList: [],
-    priority: 'Normal'
-  };
-
-  isViewingTaskGroup.value = false;
-  taskGroupList.value.push(newTaskGroup);
-  selectedTaskGroup.value = newTaskGroup;
-
-  setTimeout(() => {
-    isViewingTaskGroup.value = true;
-  });
-}
-
-function toggleSelectedTaskGroup(taskGroup) {
-  if (taskGroup == selectedTaskGroup.value) {
-    selectedTaskGroup.value = null;
-    isViewingTaskGroup.value = false;
-    return;
-  }
-
-  isViewingTaskGroup.value = false;
-  selectedTaskGroup.value = taskGroup;
-  setTimeout(() => {
-    isViewingTaskGroup.value = true;
-  }, 100);
-}
-
-function deleteTaskGroup(taskGroupToDelete) {
-  let tgList = taskGroupList.value;
-  tgList = tgList.filter((tg) => tg.id !== taskGroupToDelete.id);
-
-  taskGroupList.value = tgList;
-  toggleSelectedTaskGroup(taskGroupToDelete);
-  showDeleteDialog.value = false;
-}
-
-// Task functions
-function showTaskDetail(task) {
-  if (task == selectedTask.value) return;
-
-  isViewingTaskDetail.value = false;
-  selectedTask.value = task;
-  setTimeout(() => isViewingTaskDetail.value = true, 100);
-}
-
-function toggleTaskDone(task) {
-  if (!task.isDone) {
-    task.doneAt = Date.now();
-    task.isDone = true;
-  } else {
-    task.doneAt = null;
-    task.isDone = false;
-  }
-
-
-  console.log(task);
-}
-
-function deleteTask(taskToDelete) {
-  const taskgroup = selectedTaskGroup.value;
-  let taskList = taskgroup.taskList;
-
-  taskList = taskList.filter((t) => t !== taskToDelete);
-  selectedTaskGroup.value.taskList = taskList;
-
-  isViewingTaskDetail.value = false;
-  selectedTask.value = null;
-}
-
-const states = computed(() => {
-  return {
-    taskGroupList: taskGroupList.value,
-
-    isViewingTaskGroup: isViewingTaskGroup.value,
-    selectedTaskGroup: selectedTaskGroup.value,
-
-    isViewingTaskDetail: isViewingTaskDetail.value,
-    selectedTask: selectedTask.value,
-  };
-});
-
-watch(() => states.value, (newState) => {
-  newState = JSON.stringify(newState);
-  localStorage.setItem('todoapp', newState);
-});
-
-watch(isViewingTaskGroup, (newState) => {
-  if (newState == false) {
-    isViewingTaskDetail.value = false;
-    selectedTask.value = null;
-  }
+  previousBackgroundColor = store.selectedTaskGroup.color;
+  return previousBackgroundColor;
 });
 
 onMounted(() => {
-  restoreStates();
+  store.restoreStates();
+  previousBackgroundColor = store.selectedTaskGroup ? store.selectedTaskGroup.color : 'grey';
 });
-
-function restoreStates() {
-  const storedState = JSON.parse(localStorage.getItem("todoapp"));
-  if (storedState == null) return console.log('no storedState for todoapp');
-
-  taskGroupList.value = storedState.taskGroupList ?? taskGroupList.value;
-
-  isViewingTaskGroup.value = storedState.isViewingTaskGroup ?? isViewingTaskGroup.value;
-  selectedTaskGroup.value = storedState.selectedTaskGroup ?? selectedTaskGroup.value;
-
-  isViewingTaskDetail.value = storedState.isViewingTaskDetail ?? isViewingTaskDetail.value;
-  selectedTask.value = storedState.selectedTask ?? selectedTask.value;
-}
 </script>
 
 <template>
-  <div :class="`h-100 bg-teal-lighten-4 pa-10`">
-    <v-app-bar title="Todolist app"
-               :class="`bg-teal`"
-               v-if="false"
-               flat></v-app-bar>
+  <v-sheet :class="`h-100`"
+           :color="backgroundColor"
+           :style="{ color: getBrightorDarkTextColor(backgroundColor) }">
+    <TodoappSidebar />
 
-    <v-navigation-drawer persistent
-                         elevation="3"
-                         color="teal">
-      <v-list>
-        <v-list-item class="ms-1"
-                     prepend-icon="mdi-list-box"
-                     size="x-large"
-                     title="Todo app"
-                     subtitle="Your daily helper"
-                     color="green" />
-      </v-list>
-
-      <v-divider></v-divider>
-
-      <v-list class="px-3 bg-teal">
-        <v-list-subheader color="white">Task groups</v-list-subheader>
-        <v-list-item v-for="(taskGroup, index) in taskGroupList"
-                     @click="toggleSelectedTaskGroup(taskGroup)"
-                     prepend-icon="mdi-format-list-checkbox"
-                     class="rounded"
-                     :class="{ 'bg-teal-lighten-4': taskGroup == selectedTaskGroup }">
-
-          <template v-slot:title>
-            <span
-                  class="text-capitalize text-truncate">{{ taskGroup.name.length > 0 ? taskGroup.name : `Unnamed group ${++index}` }}</span>
-          </template>
-        </v-list-item>
-
-        <v-list-item @click="newTaskGroup"
-                     prepend-icon="mdi-plus"
-                     class="bg-white px-3 rounded mt-3"
-                     elevation="1"
-                     title="Add new task group">
-
-        </v-list-item>
-
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-row>
-      <!-- taskgroup view -->
+    <v-row class="pa-10"
+           v-if="store.isViewingTaskGroup">
+      <!-- selected taskgroup view -->
       <v-col cols="6">
         <v-scroll-x-transition>
-          <TaskList @mark-task-done="toggleTaskDone"
-                    @see-task-detail="showTaskDetail"
-                    @delete-task-group="showDeleteDialog = true"
-                    @close-task-group="toggleSelectedTaskGroup"
-                    v-if="isViewingTaskGroup"
-                    :taskGroup="selectedTaskGroup"
-                    :selectedTask="selectedTask" />
+          <TaskList v-if="store.selectedTaskGroup" />
         </v-scroll-x-transition>
       </v-col>
 
       <!-- selected task detail -->
       <v-col>
         <v-slide-x-transition>
-          <TaskDetail v-if="isViewingTaskDetail"
-                      @mark-task-done="toggleTaskDone"
-                      @delete-task="deleteTask"
-                      :selected-task="selectedTask" />
+          <TaskDetail v-if="store.selectedTask" />
         </v-slide-x-transition>
       </v-col>
     </v-row>
-  </div>
 
-  <ModalDeleteTaskGroup v-model="showDeleteDialog"
-                        :taskGroup="selectedTaskGroup"
-                        @confirm-delete="deleteTaskGroup"
-                        @cancel-delete="showDeleteDialog = false" />
+    <TaskGroupSelect v-else />
+  </v-sheet>
+
+  <ModalDeleteTaskGroup v-model="store.showDeleteDialog" />
 </template>
