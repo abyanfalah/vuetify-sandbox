@@ -15,7 +15,7 @@ const selectedApp = ref(null);
 const apps = {
   'home': HomePage,
   'gallery': GalleryApp,
-  'testpage': TestPage,
+  // 'testpage': TestPage,
   'todo': TodoApp,
   'counter': CounterApp,
   'weather': WeatherApp,
