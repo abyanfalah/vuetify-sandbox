@@ -2,6 +2,8 @@
 import { onMounted, ref, watch } from 'vue';
 import weatherService from '../services/weatherApi';
 import ProgressCircular from '@/components/ProgressCircular.vue';
+import ModalInaccuracyClarification from '@/components/weatherapp/ModalInaccuracyClarification.vue';
+
 import { computed } from '@vue/reactivity';
 import upperize from 'capitalize';
 
@@ -15,6 +17,10 @@ const isSearching = ref(false);
 const isCelsius = ref(true);
 const isShowingDetails = ref(false);
 const isError = ref(null);
+
+const showClarification = ref(false);
+const isSymphatizing = ref(false);
+
 let lastHour;
 
 
@@ -92,6 +98,7 @@ const states = computed(() => {
     isShowingDetails: isShowingDetails.value,
     currentWeather: currentWeather.value,
     lastHour,
+    isSymphatizing: isSymphatizing.value
 
   };
 
@@ -113,6 +120,7 @@ function restoreStates() {
   weatherData.value = storedState.weatherData ?? weatherData.value;
   currentWeather.value = storedState.currentWeather ?? currentWeather.value;
   isCelsius.value = storedState.isCelsius ?? isCelsius.value;
+  isSymphatizing.value = storedState.isSymphatizing ?? isSymphatizing.value;
   lastHour = storedState.lastHour;
 
 
@@ -212,10 +220,16 @@ function restoreStates() {
                     {{ weatherService.getWeatherName(currentWeather.weathercode) }}
                   </span>
 
-                  <v-btn class="mt-5"
-                         :color="`${tempColor} `"
-                         :icon="`mdi-chevron-${isShowingDetails ? 'left' : 'right'}`"
-                         @click="isShowingDetails = !isShowingDetails"></v-btn>
+                  <div class="d-flex align-center justify-center mt-5">
+                    <v-btn class="me-3"
+                           v-if="!isSymphatizing"
+                           :color="tempColor"
+                           @click="showClarification = true">Bruh that's inaccurate, why?</v-btn>
+                    <v-btn :color="`${tempColor} `"
+                           :icon="`mdi-chevron-${isShowingDetails ? 'left' : 'right'}`"
+                           @click="isShowingDetails = !isShowingDetails"></v-btn>
+                  </div>
+
                 </v-col>
 
                 <!-- weather details -->
@@ -247,6 +261,10 @@ function restoreStates() {
       </v-row>
     </v-container>
 
+    <ModalInaccuracyClarification v-if="!isSymphatizing"
+                                  :color="tempColor ?? 'black'"
+                                  @ok="{ showClarification = false; isSymphatizing = true }"
+                                  v-model="showClarification" />
 
   </div>
 </template>
