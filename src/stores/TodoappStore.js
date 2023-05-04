@@ -115,9 +115,6 @@ export const useTodoappStore = defineStore("todoapp", () => {
   }
 
   // ============= tasklist.vue
-  function changeColor() {
-    alert("coming soon");
-  }
 
   function addTask(newTask) {
     const taskGroupIndex = selectedTaskGroupIndex.value;

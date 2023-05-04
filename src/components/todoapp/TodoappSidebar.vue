@@ -28,9 +28,8 @@ function getSidebarNavStyle(taskGroup) {
 </script>
 
 <template>
-  <!-- TODO: change to if store.isViewingTaskGroup -->
-  <v-navigation-drawer v-if="true"
-                       elevation="10">
+  <v-navigation-drawer v-if="store.isViewingTaskGroup"
+                       floating>
     <v-list>
       <v-list-item class="ms-1"
                    prepend-icon="mdi-list-box"
@@ -41,13 +40,14 @@ function getSidebarNavStyle(taskGroup) {
 
     <v-divider></v-divider>
 
-    <v-list class="px-3">
+    <v-list>
       <v-list-subheader>Task groups</v-list-subheader>
       <v-list-item v-for="(taskGroup, index) in store.taskGroupList"
                    @click="store.toggleSelectedTaskGroup(taskGroup)"
                    prepend-icon="mdi-format-list-checkbox"
                    :style="getSidebarNavStyle(taskGroup)"
-                   class="rounded mb-2">
+                   class="rounded mb-2 mx-3"
+                   :class="{ 'me-0 rounded-e-0': store.selectedTaskGroup == taskGroup }">
 
         <template v-slot:title>
           <span
