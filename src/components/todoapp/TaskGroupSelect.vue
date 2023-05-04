@@ -10,6 +10,8 @@ const store = useTodoappStore();
 <template>
   <v-sheet style="min-height: 100%;"
            class="d-flex flex-column justify-center align-center">
+
+    <!-- hello to user -->
     <v-sheet color=""
              class="d-flex flex-column justify-center align-center ">
       <p class="text-h4">
@@ -20,42 +22,41 @@ const store = useTodoappStore();
              style="outline: none; text-align: center;"
              v-model="store.username"
              placeholder="Wholesome dude">
-      <p class="my-3">Let's get your tasks done!</p>
+      <p class="my-3">Let's get them tasks done!</p>
     </v-sheet>
-    <v-sheet class="text-center"
-             height="50%">
 
-      <div class="d-flex flex-row justify-center align-center mt-5">
-        <!-- <v-card v-for="(n, index) in 5"
-                class="mx-3 d-flex justify-center align-center"
-                width="150px"
-                elevation="5"
-                :class="`bg-${colors[index]}`"
-                height="150px">
-          TaskGroup {{ n }}
-        </v-card> -->
+    <!-- task group list button -->
+    <v-sheet class="d-flex justify-center align-center flex-wrap align-content-space-between"
+             max-width="80%">
 
-        <v-card v-for="(taskGroup, index) in store.taskGroupList"
-                role="button"
-                class="mx-3 d-flex justify-center align-center"
-                width="150px"
-                elevation="5"
-                @click="store.toggleSelectedTaskGroup(taskGroup)"
-                :class="`text-${getBrightorDarkTextColor(taskGroup.color)}`"
-                :color="taskGroup.color"
-                height="150px">
-          {{ taskGroup.name }}
-        </v-card>
-        <v-card role="button"
-                class="mx-3 d-flex justify-center flex-column align-center elevation-0 border"
-                width="150px"
-                @click="store.newTaskGroup"
-                height="150px">
-          <v-icon icon="mdi-plus"
-                  class="text-h4"></v-icon>
-          <p>New Taskgroup</p>
-        </v-card>
-      </div>
+
+      <!-- taskgroup button -->
+      <v-card v-for="(taskGroup, index) in store.taskGroupList"
+              role="button"
+              class="mx-3 mb-6 d-flex justify-center align-center"
+              width="150px"
+              elevation="5"
+              @click="store.toggleSelectedTaskGroup(taskGroup)"
+              :class="`text-${getBrightorDarkTextColor(taskGroup.color)}`"
+              :color="taskGroup.color"
+              height="150px">
+        {{ taskGroup.name }}
+      </v-card>
+
+      <!-- new taskgroup button -->
+      <v-card role="button"
+              class="mx-3 mb-6  d-flex justify-center flex-column align-center elevation-0 border"
+              width="150px"
+              @click="store.newTaskGroup"
+              height="150px">
+        <v-icon icon="mdi-plus"
+                class="text-h4"></v-icon>
+        <p>New Taskgroup</p>
+      </v-card>
+
     </v-sheet>
   </v-sheet>
 </template>
+
+
+<style scoped></style>
