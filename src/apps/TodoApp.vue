@@ -24,6 +24,7 @@ const backgroundColor = computed(() => {
 
 onMounted(() => {
   store.restoreStates();
+  if (store.selectedTaskGroup) { store.isViewingTaskGroup = true; }
   previousBackgroundColor = store.selectedTaskGroup ? store.selectedTaskGroup.color : 'grey';
 });
 </script>
