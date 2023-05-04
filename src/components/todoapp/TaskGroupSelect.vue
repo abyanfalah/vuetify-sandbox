@@ -5,16 +5,22 @@ import getBrightorDarkTextColor from '@/services/getBrightorDarkTextColor';
 
 const store = useTodoappStore();
 
-const colors = ref(['red-lighten-3', 'primary', 'orange', 'success', 'grey']);
 </script>
 
 <template>
-  <v-sheet class="h-screen d-flex flex-column justify-center align-center">
+  <v-sheet style="min-height: 100%;"
+           class="d-flex flex-column justify-center align-center">
     <v-sheet color=""
-             class="d-flex flex-column justify-center align-center "
-             height="10%">
-      <p class="text-h3">Hi!</p>
-      <p>Let's do some stuff</p>
+             class="d-flex flex-column justify-center align-center ">
+      <p class="text-h4">
+        Hi
+      </p>
+      <input type="text"
+             class="text-h3"
+             style="outline: none; text-align: center;"
+             v-model="store.username"
+             placeholder="Wholesome dude">
+      <p class="my-3">Let's organize your task!</p>
     </v-sheet>
     <v-sheet class="text-center"
              height="50%">
@@ -39,6 +45,15 @@ const colors = ref(['red-lighten-3', 'primary', 'orange', 'success', 'grey']);
                 :color="taskGroup.color"
                 height="150px">
           {{ taskGroup.name }}
+        </v-card>
+        <v-card role="button"
+                class="mx-3 d-flex justify-center flex-column align-center elevation-0 border"
+                width="150px"
+                @click="store.newTaskGroup"
+                height="150px">
+          <v-icon icon="mdi-plus"
+                  class="text-h4"></v-icon>
+          <p>New Taskgroup</p>
         </v-card>
       </div>
     </v-sheet>

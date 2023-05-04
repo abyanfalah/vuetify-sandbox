@@ -5,6 +5,8 @@ import { ref, watch } from "vue";
 
 export const useTodoappStore = defineStore("todoapp", () => {
   // todoapp.vue
+  const username = ref(null);
+
   const taskGroupList = ref([]);
   const selectedTaskGroup = ref(null);
   const isViewingTaskGroup = ref(false);
@@ -182,6 +184,7 @@ export const useTodoappStore = defineStore("todoapp", () => {
 
   // +=+=+=+=+=+=+=+=+=+=+=+= return the options (?)
   return {
+    username,
     taskGroupList,
     selectedTaskGroup,
     isViewingTaskGroup,
