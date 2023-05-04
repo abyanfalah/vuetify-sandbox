@@ -20,7 +20,7 @@ const store = useTodoappStore();
              style="outline: none; text-align: center;"
              v-model="store.username"
              placeholder="Wholesome dude">
-      <p class="my-3">Let's organize your task!</p>
+      <p class="my-3">Let's get your tasks done!</p>
     </v-sheet>
     <v-sheet class="text-center"
              height="50%">
