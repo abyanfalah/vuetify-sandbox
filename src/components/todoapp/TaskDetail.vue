@@ -9,7 +9,8 @@ const deleteTaskConfirmation = ref(false);
 </script>
 
 <template>
-  <v-card class=""
+  <v-card position="fixed"
+          min-width="35%"
           elevation="10">
     <v-container class="pa-5 pb-0">
       <v-card-title class="pa-0">
@@ -91,3 +92,7 @@ const deleteTaskConfirmation = ref(false);
 
   </v-card>
 </template>
+
+<style scoped>
+.sticky-top {}
+</style>
